@@ -186,14 +186,6 @@ export default function Product() {
               </div>
             </div>
 
-            {/* Price */}
-            <div className="tr-price">
-              <ProductPrice
-                price={selectedVariant?.price}
-                compareAtPrice={selectedVariant?.compareAtPrice}
-              />
-            </div>
-
             {/* Bundle selector + add to cart */}
             <div className="tr-form">
               <BundleSelector
