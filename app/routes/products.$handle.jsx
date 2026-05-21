@@ -1,0 +1,419 @@
+import {useLoaderData} from 'react-router';
+import {useState} from 'react';
+import {
+  getSelectedProductOptions,
+  Analytics,
+  useOptimisticVariant,
+  getProductOptions,
+  getAdjacentAndFirstAvailableVariants,
+  useSelectedOptionInUrlParam,
+} from '@shopify/hydrogen';
+import {ProductPrice} from '~/components/ProductPrice';
+import {ProductImage} from '~/components/ProductImage';
+import {ProductForm} from '~/components/ProductForm';
+import {AddToCartButton} from '~/components/AddToCartButton';
+import {useAside} from '~/components/Aside';
+import {redirectIfHandleIsLocalized} from '~/lib/redirect';
+
+export const meta = ({data}) => {
+  return [
+    {title: `Estiera | ${data?.product.title ?? ''}`},
+    {rel: 'canonical', href: `/products/${data?.product.handle}`},
+  ];
+};
+
+export async function loader(args) {
+  const deferredData = loadDeferredData(args);
+  const criticalData = await loadCriticalData(args);
+  return {...deferredData, ...criticalData};
+}
+
+async function loadCriticalData({context, params, request}) {
+  const {handle} = params;
+  const {storefront} = context;
+  if (!handle) throw new Error('Expected product handle to be defined');
+  const [{product}] = await Promise.all([
+    storefront.query(PRODUCT_QUERY, {
+      variables: {handle, selectedOptions: getSelectedProductOptions(request)},
+    }),
+  ]);
+  if (!product?.id) throw new Response(null, {status: 404});
+  redirectIfHandleIsLocalized(request, {handle, data: product});
+  return {product};
+}
+
+function loadDeferredData() {
+  return {};
+}
+
+const BUNDLES = [
+  {qty: 1, label: '1 Lamp', sublabel: 'Standard price', price: 39.99, compareAt: null, popular: false},
+  {qty: 2, label: '2 Lamps', sublabel: 'You save 15%', price: 67.99, compareAt: 79.98, popular: true},
+];
+
+function BundleSelector({selected, onSelect, image}) {
+  return (
+    <div className="tr-bundles">
+      {BUNDLES.map((b) => (
+        <button
+          key={b.qty}
+          type="button"
+          className={`tr-bundle-card${selected === b.qty ? ' tr-bundle-card--active' : ''}`}
+          onClick={() => onSelect(b.qty)}
+        >
+          {b.popular && <div className="tr-bundle-badge">Most Popular</div>}
+          <div className="tr-bundle-imgs">
+            {Array(b.qty).fill(null).map((_, i) => (
+              image ? <img key={i} src={image} alt="lamp" className="tr-bundle-img" /> : <span key={i} className="tr-bundle-emoji">💡</span>
+            ))}
+          </div>
+          <div className="tr-bundle-qty">{b.label}</div>
+          <div className="tr-bundle-sublabel">{b.sublabel}</div>
+          <div className="tr-bundle-price">${b.price.toFixed(2)}</div>
+          {b.compareAt && <div className="tr-bundle-compare">${b.compareAt.toFixed(2)}</div>}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+export default function Product() {
+  const {product} = useLoaderData();
+  const {open} = useAside();
+  const [activeThumb, setActiveThumb] = useState(0);
+  const [openAccordion, setOpenAccordion] = useState(null);
+  const [selectedBundle, setSelectedBundle] = useState(2);
+
+  const selectedVariant = useOptimisticVariant(
+    product.selectedOrFirstAvailableVariant,
+    getAdjacentAndFirstAvailableVariants(product),
+  );
+
+  useSelectedOptionInUrlParam(selectedVariant.selectedOptions);
+
+  const productOptions = getProductOptions({
+    ...product,
+    selectedOrFirstAvailableVariant: selectedVariant,
+  });
+
+  const {title, descriptionHtml} = product;
+
+  const accordionItems = [
+    {
+      label: 'Description',
+      content: descriptionHtml
+        ? <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
+        : <p>The Estiera RGB Jellyfish Lamp creates a dreamy, calming atmosphere in any bedroom. Features 16 RGB color modes, remote control, and USB power.</p>,
+    },
+    {
+      label: 'What is included',
+      content: <p>1x RGB Jellyfish Lamp, 1x Wireless Remote Control, 1x USB Power Cable, 1x User Guide.</p>,
+    },
+    {
+      label: 'Shipping & Returns',
+      content: <p>Ships within 1-2 business days. Free shipping on orders over $50. 30-day hassle-free returns.</p>,
+    },
+  ];
+
+  return (
+    <div className="tr-page">
+
+      {/* ── ANNOUNCEMENT BAR ── */}
+      <div className="tr-announcement">
+        <span>✦ FREE SHIPPING ON ORDERS OVER $50 — LIMITED TIME OFFER ✦</span>
+      </div>
+
+      {/* ── MAIN PRODUCT SECTION ── */}
+      <section className="tr-product">
+        <div className="tr-product-inner">
+
+          {/* LEFT — Gallery */}
+          <div className="tr-gallery">
+            <div className="tr-gallery-main">
+              <ProductImage image={selectedVariant?.image} />
+            </div>
+            <div className="tr-gallery-thumbs">
+              {[0, 1, 2, 3, 4].map((i) => (
+                <button
+                  key={i}
+                  className={`tr-thumb${activeThumb === i ? ' tr-thumb--active' : ''}`}
+                  onClick={() => setActiveThumb(i)}
+                >
+                  <ProductImage image={selectedVariant?.image} />
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* RIGHT — Info */}
+          <div className="tr-info">
+
+            {/* Rating */}
+            <div className="tr-rating">
+              <span className="tr-stars">★★★★★</span>
+              <span className="tr-rating-count">Rated 4.9 (238)</span>
+              <span className="tr-rating-badge">Happy Customers</span>
+            </div>
+
+            {/* Title */}
+            <h1 className="tr-title">{title}</h1>
+
+            {/* Feature badges */}
+            <div className="tr-badges">
+              <div className="tr-badge">
+                <span className="tr-badge-icon">🌈</span>
+                <span>16 RGB Colors</span>
+              </div>
+              <div className="tr-badge">
+                <span className="tr-badge-icon">🎮</span>
+                <span>Remote Control</span>
+              </div>
+              <div className="tr-badge">
+                <span className="tr-badge-icon">🌊</span>
+                <span>Calming Glow</span>
+              </div>
+              <div className="tr-badge">
+                <span className="tr-badge-icon">✨</span>
+                <span>Aesthetic Decor</span>
+              </div>
+            </div>
+
+            {/* Price */}
+            <div className="tr-price">
+              <ProductPrice
+                price={selectedVariant?.price}
+                compareAtPrice={selectedVariant?.compareAtPrice}
+              />
+            </div>
+
+            {/* Bundle selector + add to cart */}
+            <div className="tr-form">
+              <BundleSelector
+                selected={selectedBundle}
+                onSelect={setSelectedBundle}
+                image={selectedVariant?.image?.url}
+              />
+              <AddToCartButton
+                disabled={!selectedVariant || !selectedVariant.availableForSale}
+                onClick={() => open('cart')}
+                lines={selectedVariant ? [{merchandiseId: selectedVariant.id, quantity: selectedBundle, selectedVariant}] : []}
+              >
+                <span className="atc-btn-inner">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                  </svg>
+                  {selectedVariant?.availableForSale ? 'ADD TO CART' : 'SOLD OUT'}
+                </span>
+              </AddToCartButton>
+            </div>
+
+            {/* Trust row */}
+            <div className="tr-trust">
+              <span>🚚 Ships Next Day</span>
+              <span>✦ 30-Day Returns</span>
+              <span>🔒 Secure Checkout</span>
+            </div>
+
+            {/* Accordion */}
+            <div className="tr-accordion">
+              {accordionItems.map((item, i) => (
+                <div key={i} className={`tr-acc-item${openAccordion === i ? ' tr-acc-item--open' : ''}`}>
+                  <button
+                    className="tr-acc-trigger"
+                    onClick={() => setOpenAccordion(openAccordion === i ? null : i)}
+                  >
+                    <span>{item.label}</span>
+                    <span className="tr-acc-icon">{openAccordion === i ? '−' : '+'}</span>
+                  </button>
+                  {openAccordion === i && (
+                    <div className="tr-acc-body">{item.content}</div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── MARQUEE ── */}
+      <div className="tr-marquee-wrap">
+        <div className="tr-marquee">
+          {Array(8).fill(null).map((_, i) => (
+            <span key={i} className="tr-marquee-item">
+              🌊 DREAMY ROOMS &nbsp;✦&nbsp; CALMING VIBES &nbsp;✦&nbsp; AESTHETIC LIGHTING &nbsp;✦&nbsp; COZY NIGHTS &nbsp;✦&nbsp; YOUR VIBE YOUR ROOM &nbsp;✦&nbsp;&nbsp;
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* ── HELPS WITH ── */}
+      <section className="tr-helps">
+        <h2 className="tr-helps-title">TRANSFORMS YOUR ROOM</h2>
+        <div className="tr-helps-grid">
+          <div className="tr-helps-card">
+            <span className="tr-helps-icon">🌙</span>
+            <h3>Cozy Night Vibes</h3>
+            <p>The perfect ambient light for unwinding, journaling, or just existing in your room.</p>
+          </div>
+          <div className="tr-helps-card">
+            <span className="tr-helps-icon">🎨</span>
+            <h3>Aesthetic Upgrade</h3>
+            <p>Instantly transforms any room into a Pinterest-worthy, dreamy space.</p>
+          </div>
+          <div className="tr-helps-card">
+            <span className="tr-helps-icon">💜</span>
+            <h3>Calming Energy</h3>
+            <p>The soft jellyfish glow reduces stress and creates a relaxing sanctuary.</p>
+          </div>
+          <div className="tr-helps-card">
+            <span className="tr-helps-icon">📸</span>
+            <h3>Always Camera Ready</h3>
+            <p>Your room looks stunning for photos, TikToks, and late-night video calls.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── REVIEWS ── */}
+      <section className="tr-reviews">
+        <div className="tr-reviews-header">
+          <h2 className="tr-reviews-title">What our customers say</h2>
+          <div className="tr-reviews-summary">
+            <span className="tr-reviews-score">4.9</span>
+            <div>
+              <div className="tr-reviews-stars">★★★★★</div>
+              <p>Based on 238 reviews</p>
+            </div>
+          </div>
+        </div>
+        <div className="tr-reviews-grid">
+          {[
+            {name: 'Sofia M.', text: "This lamp is literally the best thing I have ever bought for my room. The colors are so dreamy and it makes everything feel so cozy.", date: 'May 2025'},
+            {name: 'Lia K.', text: "I bought this for my dorm and everyone who visits asks where I got it. Obsessed does not even cover it.", date: 'April 2025'},
+            {name: 'Emma R.', text: "The remote makes it so easy to switch colors. I use the purple mode every single night. It is genuinely so calming.", date: 'April 2025'},
+            {name: 'Maya T.', text: "My room looks like it is straight from Pinterest now. Best purchase of the year honestly.", date: 'March 2025'},
+            {name: 'Zoe A.', text: "Bought this for a gift and ended up ordering one for myself too. The glow is just so aesthetic.", date: 'March 2025'},
+            {name: 'Aria L.', text: "Absolutely love how my room feels now. The jellyfish lamp is such a vibe. 10/10 recommend.", date: 'February 2025'},
+          ].map((r, i) => (
+            <div key={i} className="tr-review-card">
+              <div className="tr-review-stars">★★★★★</div>
+              <p className="tr-review-text">"{r.text}"</p>
+              <div className="tr-review-meta">
+                <span className="tr-review-avatar">{r.name[0]}</span>
+                <div>
+                  <p className="tr-review-name">{r.name}</p>
+                  <p className="tr-review-date">{r.date}</p>
+                </div>
+                <span className="tr-review-verified">✓ Verified</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── FAQ ── */}
+      <section className="tr-faq">
+        <h2 className="tr-faq-title">Frequently Asked Questions</h2>
+        <FAQList />
+      </section>
+
+      {/* ── FINAL CTA ── */}
+      <section className="tr-final">
+        <div className="tr-final-inner">
+          <h2 className="tr-final-title">Ready to transform your room?</h2>
+          <p className="tr-final-sub">Join thousands of aesthetic bedroom lovers who chose Estiera.</p>
+          <ProductForm productOptions={productOptions} selectedVariant={selectedVariant} />
+        </div>
+      </section>
+
+      <Analytics.ProductView
+        data={{
+          products: [
+            {
+              id: product.id,
+              title: product.title,
+              price: selectedVariant?.price.amount || '0',
+              vendor: product.vendor,
+              variantId: selectedVariant?.id || '',
+              variantTitle: selectedVariant?.title || '',
+              quantity: 1,
+            },
+          ],
+        }}
+      />
+    </div>
+  );
+}
+
+const faqs = [
+  {q: 'How long does shipping take?', a: 'We ship within 1-2 business days. Delivery typically takes 5-10 business days depending on your location.'},
+  {q: 'Does it come with a remote control?', a: 'Yes! Every Estiera Jellyfish Lamp includes a wireless remote so you can change colors and brightness effortlessly.'},
+  {q: 'How many RGB colors does it have?', a: 'The lamp features 16 beautiful RGB color modes including soft lavender, ocean blue, rose pink, warm white, and more.'},
+  {q: 'Is it suitable for a bedroom or desk?', a: 'Absolutely. It is designed to work beautifully on nightstands, desks, shelves, or anywhere in your room.'},
+  {q: 'How do I set it up?', a: 'Simply plug it in via USB, turn it on, and use the remote to choose your favorite color. Setup takes under 30 seconds.'},
+];
+
+function FAQList() {
+  const [open, setOpen] = useState(null);
+  return (
+    <div className="tr-faq-list">
+      {faqs.map((item, i) => (
+        <div key={i} className={`tr-faq-item${open === i ? ' tr-faq-item--open' : ''}`}>
+          <button className="tr-faq-q" onClick={() => setOpen(open === i ? null : i)}>
+            <span>{item.q}</span>
+            <span className="tr-faq-icon">{open === i ? '−' : '+'}</span>
+          </button>
+          {open === i && <p className="tr-faq-a">{item.a}</p>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+const PRODUCT_VARIANT_FRAGMENT = `#graphql
+  fragment ProductVariant on ProductVariant {
+    availableForSale
+    compareAtPrice { amount currencyCode }
+    id
+    image { __typename id url altText width height }
+    price { amount currencyCode }
+    product { title handle }
+    selectedOptions { name value }
+    sku title
+    unitPrice { amount currencyCode }
+  }
+`;
+
+const PRODUCT_FRAGMENT = `#graphql
+  fragment Product on Product {
+    id title vendor handle descriptionHtml description
+    encodedVariantExistence encodedVariantAvailability
+    options {
+      name
+      optionValues {
+        name
+        firstSelectableVariant { ...ProductVariant }
+        swatch { color image { previewImage { url } } }
+      }
+    }
+    selectedOrFirstAvailableVariant(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {
+      ...ProductVariant
+    }
+    adjacentVariants(selectedOptions: $selectedOptions) { ...ProductVariant }
+    seo { description title }
+  }
+  ${PRODUCT_VARIANT_FRAGMENT}
+`;
+
+const PRODUCT_QUERY = `#graphql
+  query Product(
+    $country: CountryCode $handle: String!
+    $language: LanguageCode $selectedOptions: [SelectedOptionInput!]!
+  ) @inContext(country: $country, language: $language) {
+    product(handle: $handle) { ...Product }
+  }
+  ${PRODUCT_FRAGMENT}
+`;
+
+/** @typedef {import('./+types/products.$handle').Route} Route */
+/** @typedef {import('@shopify/remix-oxygen').SerializeFrom<typeof loader>} LoaderReturnData */
