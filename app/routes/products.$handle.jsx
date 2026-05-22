@@ -103,7 +103,13 @@ export default function Product() {
       label: 'Description',
       content: descriptionHtml
         ? <div dangerouslySetInnerHTML={{__html: descriptionHtml}} />
-        : <p>The Estiera RGB Jellyfish Lamp creates a dreamy, calming atmosphere in any bedroom. Features 16 RGB color modes, remote control, and USB power.</p>,
+        : <div>
+            <p>Transform your space with the ESTIERA Aura Lamp — a premium ambient light designed to bring elegance, warmth, and atmosphere to any room. Inspired by the calm beauty of the ocean, its minimalist floating design creates a soft glow that instantly upgrades your setup and makes every space feel more refined.</p>
+            <br/>
+            <p>With 16 immersive RGB colors and an easy-to-use remote control, you can customize the perfect mood for relaxing nights, late gaming sessions, or modern room decor.</p>
+            <br/>
+            <p>✨ 16 customizable RGB colors<br/>✨ Soft calming ambient glow<br/>✨ Elegant minimalist design<br/>✨ Remote control included<br/>✨ Perfect for bedrooms, desks & modern interiors</p>
+          </div>,
     },
     {
       label: 'What is included',
