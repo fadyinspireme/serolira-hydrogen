@@ -12,6 +12,8 @@ body {
   overflow-x: hidden;
   max-width: 100%;
   position: relative;
+  margin: 0;
+  padding: 0;
 }
 
 :root {
@@ -1866,11 +1868,12 @@ html, body {
   text-align: center;
   padding: 0.5rem 0;
   font-size: 0.7rem;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   width: 100%;
   margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 /* Page wrapper */
