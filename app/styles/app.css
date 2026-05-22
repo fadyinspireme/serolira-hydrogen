@@ -1989,8 +1989,9 @@ html, body {
 
 .tr-stars {
   color: #F59E0B;
-  font-size: 1rem;
-  letter-spacing: 2px;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  white-space: nowrap;
 }
 
 .tr-rating-count {
@@ -2159,7 +2160,7 @@ html, body {
 .tr-info {
   width: 100%;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: visible;
   padding: 0;
 }
 
