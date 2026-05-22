@@ -120,7 +120,7 @@ export default function Product() {
 
       {/* ── ANNOUNCEMENT BAR ── */}
       <div className="tr-announcement">
-        <span>🚚 FREE US SHIPPING ON ORDERS $60+</span>
+        <span>🚚 FREE WORLDWIDE SHIPPING ON ORDERS $60+</span>
       </div>
 
       {/* ── MAIN PRODUCT SECTION ── */}
