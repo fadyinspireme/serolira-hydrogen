@@ -23,6 +23,9 @@ export function PageLayout({
 }) {
   return (
     <Aside.Provider>
+      <div className="tr-announcement">
+        <span>🚚 FREE WORLDWIDE SHIPPING ON ORDERS $60+</span>
+      </div>
       <CartAside cart={cart} />
       <SearchAside />
       <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />

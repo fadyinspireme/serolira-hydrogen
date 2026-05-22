@@ -118,11 +118,6 @@ export default function Product() {
   return (
     <div className="tr-page">
 
-      {/* ── ANNOUNCEMENT BAR ── */}
-      <div className="tr-announcement">
-        <span>🚚 FREE WORLDWIDE SHIPPING ON ORDERS $60+</span>
-      </div>
-
       {/* ── MAIN PRODUCT SECTION ── */}
       <section className="tr-product">
         <div className="tr-product-inner">
