@@ -253,57 +253,54 @@ export default function Product() {
         </div>
       </section>
 
-      {/* ── TIKTOK UGC ── */}
-      <section className="tr-ugc">
-        <div className="tr-ugc-inner">
+      {/* ── VIBE GALLERY ── */}
+      <section className="tr-vibe">
+        <div className="tr-vibe-inner">
 
-          <div className="tr-ugc-header">
-            <div className="tr-ugc-seen-badge">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/></svg>
-              As seen on TikTok
-            </div>
-            <span className="tr-ugc-label">REAL CUSTOMER VIBES</span>
-            <h2 className="tr-ugc-title">TikTok can't stop talking about <span>ESTIERA</span></h2>
-            <p className="tr-ugc-subtitle">See how creators style the ESTIERA Aura Lamp in their rooms.</p>
+          <div className="tr-vibe-header">
+            <span className="tr-vibe-label">THE ESTIERA EXPERIENCE</span>
+            <h2 className="tr-vibe-title">Choose Your <span>ESTIERA</span> Vibe</h2>
+            <p className="tr-vibe-subtitle">Designed to transform every corner of your room.</p>
           </div>
 
-          <div className="tr-ugc-cards-wrap">
-            <div className="tr-ugc-cards">
+          <div className="tr-vibe-cards-wrap">
+            <div className="tr-vibe-cards">
               {[
-                {user: '@cozyroomvibes', caption: 'this lamp changed my whole setup ✨', views: '2.4M', likes: '187K', grad: 'linear-gradient(160deg,#1a0a2e 0%,#2d1060 40%,#6b21a8 100%)'},
-                {user: '@aestheticdreams', caption: 'the glow at night is INSANE 🌙', views: '1.8M', likes: '142K', grad: 'linear-gradient(160deg,#0f0a1e 0%,#1e1050 40%,#4c1d95 100%)'},
-                {user: '@latevibess', caption: 'best purchase for my room no joke 💜', views: '3.1M', likes: '261K', grad: 'linear-gradient(160deg,#160a2a 0%,#3b0764 40%,#7e22ce 100%)'},
+                {
+                  title: 'Cozy Night Setup',
+                  tag: 'Bedroom',
+                  grad: 'linear-gradient(170deg,#0d0618 0%,#1e0b35 35%,#4a1277 70%,#7c3aed 100%)',
+                },
+                {
+                  title: 'Minimal Desk Vibes',
+                  tag: 'Workspace',
+                  grad: 'linear-gradient(170deg,#080412 0%,#150930 40%,#2e1065 75%,#5b21b6 100%)',
+                },
+                {
+                  title: 'Late Night Glow',
+                  tag: 'Ambiance',
+                  grad: 'linear-gradient(170deg,#0a0315 0%,#1a0538 40%,#3b0764 70%,#6d28d9 100%)',
+                },
               ].map((card, i) => (
-                <div key={i} className="tr-ugc-card">
-                  <div className="tr-ugc-video" style={{background: card.grad}}>
-                    <div className="tr-ugc-glow" />
-                    <div className="tr-ugc-play">
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                <div key={i} className="tr-vibe-card">
+                  <div className="tr-vibe-visual" style={{background: card.grad}}>
+                    <div className="tr-vibe-orb" />
+                    <div className="tr-vibe-jellyfish">🪼</div>
+                    <div className="tr-vibe-overlay" />
+                    <div className="tr-vibe-card-bottom">
+                      <span className="tr-vibe-tag">{card.tag}</span>
+                      <h3 className="tr-vibe-card-title">{card.title}</h3>
                     </div>
-                    <div className="tr-ugc-video-bottom">
-                      <div className="tr-ugc-user">
-                        <div className="tr-ugc-avatar">{card.user[1].toUpperCase()}</div>
-                        <span>{card.user}</span>
-                      </div>
-                      <div className="tr-ugc-eng">
-                        <span>▶ {card.views}</span>
-                        <span>♥ {card.likes}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="tr-ugc-info">
-                    <div className="tr-ugc-stars">★★★★★</div>
-                    <p className="tr-ugc-caption">"{card.caption}"</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="tr-ugc-marquee-wrap">
-            <div className="tr-ugc-marquee">
+          <div className="tr-vibe-marquee-wrap">
+            <div className="tr-vibe-marquee">
               {Array(8).fill(null).map((_, i) => (
-                <span key={i} className="tr-ugc-marquee-item">viral on tiktok ✦ aesthetic setup ✦ cozy room ✦ dorm vibes ✦&nbsp;&nbsp;</span>
+                <span key={i} className="tr-vibe-marquee-item">aesthetic setup ✦ cozy room ✦ minimal vibes ✦ your space your light ✦&nbsp;&nbsp;</span>
               ))}
             </div>
           </div>
