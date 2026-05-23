@@ -3,6 +3,15 @@ import {useState} from 'react';
 import vibeVideo1 from '~/assets/17e0c80ecc57c5e1a9e89a24b4ec6f9b.mp4';
 import vibeVideo2 from '~/assets/1cf64b4164ca5b88e8ab2d9ee52f3573.mp4';
 import vibeVideo3 from '~/assets/c32d79e0f514ea354faf22eba3f7a849_720w.mp4';
+import rev1 from '~/assets/A45430c6c6f274be999d8972e139dbeedy.jpg_960x960q75.jpg_.avif';
+import rev2 from '~/assets/A2007cc2bd40b42a3a537a4e09709c21aM.jpg_960x960q75.jpg_.avif';
+import rev3 from '~/assets/A7213df92cb8a41ff9c24abd11c1c48c19.jpg_960x960q75.jpg_.avif';
+import rev4 from '~/assets/A0639b5e9961f45f29377128d7a11b765A.jpg_960x960q75.jpg_.avif';
+import rev5 from '~/assets/A7a5659d5b86842d9ae186efa3ddd8edbL.jpg_960x960q75.jpg_.avif';
+import rev6 from '~/assets/Aa9a06ff4f03a4a22af30870a084d56daX.jpg_960x960q75.jpg_.avif';
+import rev7 from '~/assets/Ab01fd8074a834921aedc493d0b7e53cbV.jpg_960x960q75.jpg_.avif';
+import rev8 from '~/assets/A3bfaabac835a49b8bbb6ae8b37012f6cW.jpg_960x960q75.jpg_.avif';
+import rev9 from '~/assets/A6ba5f1d98eeb46ddb735e8b4d1628113O.jpg_960x960q75.jpg_.avif';
 import {
   getSelectedProductOptions,
   Analytics,
@@ -299,46 +308,7 @@ export default function Product() {
       </section>
 
       {/* ── REVIEWS ── */}
-      <section className="tr-reviews">
-        <div className="tr-reviews-header">
-          <h2 className="tr-reviews-title">What our customers say</h2>
-          <div className="tr-reviews-summary">
-            <span className="tr-reviews-score">4.9</span>
-            <div>
-              <div className="tr-reviews-stars">★★★★★</div>
-              <p>Based on 238 reviews</p>
-            </div>
-          </div>
-        </div>
-        <div className="tr-reviews-grid">
-          {[
-            {name: 'Sofia M.', country: '🇺🇸', text: 'This lamp is literally the best thing I have ever bought for my room. The colors are so dreamy and it makes everything feel so cozy.', date: 'May 2025', color: '#7C3AED'},
-            {name: 'Lia K.', country: '🇬🇧', text: 'I bought this for my dorm and everyone who visits asks where I got it. The purple glow is everything. Obsessed does not even cover it.', date: 'April 2025', color: '#9333EA'},
-            {name: 'Emma R.', country: '🇦🇺', text: 'The remote makes it so easy to switch colors. I use the purple mode every single night. It is genuinely so calming and the quality is amazing.', date: 'April 2025', color: '#6D28D9'},
-            {name: 'Maya T.', country: '🇨🇦', text: 'My room looks like it is straight from Pinterest now. Everyone asks about this lamp when they come over. Best purchase of the year honestly.', date: 'March 2025', color: '#5B21B6'},
-            {name: 'Zoe A.', country: '🇩🇪', text: 'Bought this for a gift and ended up ordering one for myself too. The glow at night is so aesthetic and the packaging was really premium.', date: 'March 2025', color: '#7C3AED'},
-            {name: 'Aria L.', country: '🇫🇷', text: 'Absolutely love how my room feels now. The jellyfish design is so unique and the light is super calming. 10/10 would recommend to anyone.', date: 'February 2025', color: '#8B5CF6'},
-            {name: 'Chloe B.', country: '🇳🇱', text: 'I was not sure at first but wow this lamp transformed my whole bedroom vibe. The colors are so vivid and it arrives really fast.', date: 'February 2025', color: '#A855F7'},
-            {name: 'Isla W.', country: '🇸🇪', text: 'Perfect for my desk setup. The soft glow does not strain my eyes during late night study sessions. Looks incredible on camera too.', date: 'January 2025', color: '#6D28D9'},
-            {name: 'Nora J.', country: '🇧🇪', text: 'The lamp is even better in person. Super easy to set up and the remote works from across the room. My whole family wants one now.', date: 'January 2025', color: '#7C3AED'},
-          ].map((r, i) => (
-            <div key={i} className="tr-review-card">
-              <div className="tr-review-card-top">
-                <div className="tr-review-avatar-wrap">
-                  <span className="tr-review-avatar" style={{background: r.color}}>{r.name[0]}</span>
-                </div>
-                <div className="tr-review-author">
-                  <p className="tr-review-name">{r.name} <span className="tr-review-country">{r.country}</span></p>
-                  <div className="tr-review-stars">★★★★★</div>
-                </div>
-                <span className="tr-review-verified">✓ Verified</span>
-              </div>
-              <p className="tr-review-text">{r.text}</p>
-              <p className="tr-review-date">{r.date}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <ReviewsSection />
 
       {/* ── FAQ ── */}
       <section className="tr-faq">
@@ -371,6 +341,69 @@ export default function Product() {
         }}
       />
     </div>
+  );
+}
+
+const ALL_REVIEWS = [
+  {name: 'Sofia', photo: rev1, text: 'This lamp completely changed the vibe of my room. I turn it on every night.', date: 'May 2025'},
+  {name: 'Emma', photo: rev2, text: 'My setup finally feels cozy and expensive. Everyone asks where I got it.', date: 'April 2025'},
+  {name: 'Lia', photo: rev3, text: 'The glow looks unreal at night. Best thing I have bought for my room.', date: 'April 2025'},
+  {name: 'Maya', photo: rev4, text: 'I turn it on every single night. The purple mode is so calming.', date: 'March 2025'},
+  {name: 'Zoe', photo: rev5, text: 'My room looks straight from Pinterest now. So aesthetic and premium.', date: 'March 2025'},
+  {name: 'Aria', photo: rev6, text: 'Bought it as a gift and ordered one for myself too. The quality is amazing.', date: 'February 2025'},
+  {name: 'Chloe', photo: rev7, text: 'The jellyfish design is so unique. It transforms the whole room energy.', date: 'February 2025'},
+  {name: 'Isla', photo: rev8, text: 'Perfect for my desk. The soft glow does not strain my eyes at all.', date: 'January 2025'},
+  {name: 'Nora', photo: rev9, text: 'Even better in person. Super easy to set up and the remote is great.', date: 'January 2025'},
+];
+
+function RvCard({r}) {
+  return (
+    <div className="rv-card">
+      <div className="rv-card-top">
+        <img src={r.photo} alt={r.name} className="rv-avatar" />
+        <div className="rv-card-author">
+          <p className="rv-name">{r.name}</p>
+          <span className="rv-verified">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Verified Customer
+          </span>
+        </div>
+      </div>
+      <div className="rv-stars">★★★★★</div>
+      <p className="rv-text">{r.text}</p>
+    </div>
+  );
+}
+
+function ReviewsSection() {
+  const col1 = ALL_REVIEWS.slice(0, 3);
+  const col2 = ALL_REVIEWS.slice(3, 6);
+  const col3 = ALL_REVIEWS.slice(6, 9);
+  return (
+    <section className="rv-section">
+      <div className="rv-header">
+        <span className="rv-label">CUSTOMER LOVE</span>
+        <h2 className="rv-title">What Our Customers Say</h2>
+        <p className="rv-subtitle">Thousands are transforming their rooms with ESTIERA.</p>
+      </div>
+      <div className="rv-cols">
+        <div className="rv-col-wrap">
+          <div className="rv-col rv-col--1">
+            {[...col1, ...col1].map((r, i) => <RvCard key={i} r={r} />)}
+          </div>
+        </div>
+        <div className="rv-col-wrap">
+          <div className="rv-col rv-col--2">
+            {[...col2, ...col2].map((r, i) => <RvCard key={i} r={r} />)}
+          </div>
+        </div>
+        <div className="rv-col-wrap rv-col-wrap--desktop">
+          <div className="rv-col rv-col--3">
+            {[...col3, ...col3].map((r, i) => <RvCard key={i} r={r} />)}
+          </div>
+        </div>
+      </div>
+    </section>
   );
 }
 
