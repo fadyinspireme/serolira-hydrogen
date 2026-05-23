@@ -3256,6 +3256,8 @@ textarea {
   list-style: none;
   margin: 0;
   padding: 0 1.2rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ── Single line item ── */
@@ -3412,10 +3414,17 @@ textarea {
 
 /* ── Upsell cards ── */
 .lx-upsells {
-  padding: 0.75rem 1.2rem 0.5rem;
+  padding: 0.75rem 1.2rem 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.lx-upsells > form {
+  display: block;
+  width: 100%;
 }
 
 .lx-upsell {
@@ -3531,9 +3540,11 @@ textarea {
   cursor: pointer;
   text-align: left;
   font-family: inherit;
+  font-size: inherit;
   transition: border-color 200ms, box-shadow 200ms;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .lx-bundle-card::before {
@@ -3740,6 +3751,16 @@ textarea {
   background: #ECFDF5;
   padding: 0.12rem 0.4rem;
   border-radius: 4px;
+}
+
+.lx-summary-row--discount {
+  color: #059669;
+}
+
+.lx-summary-discount {
+  font-weight: 700;
+  color: #059669;
+  font-size: 0.83rem;
 }
 
 .lx-summary-divider {

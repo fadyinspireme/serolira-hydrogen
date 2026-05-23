@@ -32,12 +32,13 @@ export function CartSummary({cart, layout, shippingProtection = false}) {
   }
 
   const subtotalNum = parseFloat(cart?.cost?.subtotalAmount?.amount || '0');
-  const total = subtotalNum + (shippingProtection ? 0.99 : 0);
   const currency = cart?.cost?.subtotalAmount?.currencyCode || 'USD';
-  const formattedTotal = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency,
-  }).format(total);
+  const fmt = (n) => new Intl.NumberFormat('en-US', {style: 'currency', currency}).format(n);
+
+  const firstLine = cart?.lines?.nodes?.[0];
+  const isBundle = (firstLine?.quantity ?? 0) >= 2;
+  const bundleSavings = isBundle ? 11.99 : 0;
+  const total = subtotalNum - bundleSavings + (shippingProtection ? 0.99 : 0);
 
   return (
     <div className="lx-summary">
@@ -46,6 +47,12 @@ export function CartSummary({cart, layout, shippingProtection = false}) {
           <span>Subtotal</span>
           {cart?.cost?.subtotalAmount && <Money data={cart.cost.subtotalAmount} />}
         </div>
+        {isBundle && (
+          <div className="lx-summary-row lx-summary-row--discount">
+            <span>Bundle Savings</span>
+            <span className="lx-summary-discount">−$11.99</span>
+          </div>
+        )}
         <div className="lx-summary-row">
           <span>Shipping</span>
           <span className="lx-summary-free">FREE</span>
@@ -59,7 +66,7 @@ export function CartSummary({cart, layout, shippingProtection = false}) {
         <div className="lx-summary-divider" />
         <div className="lx-summary-row lx-summary-row--total">
           <span>Total</span>
-          <span className="lx-summary-total-val">{formattedTotal}</span>
+          <span className="lx-summary-total-val">{fmt(total)}</span>
         </div>
       </div>
 
