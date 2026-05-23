@@ -312,24 +312,29 @@ export default function Product() {
         </div>
         <div className="tr-reviews-grid">
           {[
-            {name: 'Sofia M.', text: "This lamp is literally the best thing I have ever bought for my room. The colors are so dreamy and it makes everything feel so cozy.", date: 'May 2025'},
-            {name: 'Lia K.', text: "I bought this for my dorm and everyone who visits asks where I got it. Obsessed does not even cover it.", date: 'April 2025'},
-            {name: 'Emma R.', text: "The remote makes it so easy to switch colors. I use the purple mode every single night. It is genuinely so calming.", date: 'April 2025'},
-            {name: 'Maya T.', text: "My room looks like it is straight from Pinterest now. Best purchase of the year honestly.", date: 'March 2025'},
-            {name: 'Zoe A.', text: "Bought this for a gift and ended up ordering one for myself too. The glow is just so aesthetic.", date: 'March 2025'},
-            {name: 'Aria L.', text: "Absolutely love how my room feels now. The jellyfish lamp is such a vibe. 10/10 recommend.", date: 'February 2025'},
+            {name: 'Sofia M.', country: '🇺🇸', text: 'This lamp is literally the best thing I have ever bought for my room. The colors are so dreamy and it makes everything feel so cozy.', date: 'May 2025', color: '#7C3AED'},
+            {name: 'Lia K.', country: '🇬🇧', text: 'I bought this for my dorm and everyone who visits asks where I got it. The purple glow is everything. Obsessed does not even cover it.', date: 'April 2025', color: '#9333EA'},
+            {name: 'Emma R.', country: '🇦🇺', text: 'The remote makes it so easy to switch colors. I use the purple mode every single night. It is genuinely so calming and the quality is amazing.', date: 'April 2025', color: '#6D28D9'},
+            {name: 'Maya T.', country: '🇨🇦', text: 'My room looks like it is straight from Pinterest now. Everyone asks about this lamp when they come over. Best purchase of the year honestly.', date: 'March 2025', color: '#5B21B6'},
+            {name: 'Zoe A.', country: '🇩🇪', text: 'Bought this for a gift and ended up ordering one for myself too. The glow at night is so aesthetic and the packaging was really premium.', date: 'March 2025', color: '#7C3AED'},
+            {name: 'Aria L.', country: '🇫🇷', text: 'Absolutely love how my room feels now. The jellyfish design is so unique and the light is super calming. 10/10 would recommend to anyone.', date: 'February 2025', color: '#8B5CF6'},
+            {name: 'Chloe B.', country: '🇳🇱', text: 'I was not sure at first but wow this lamp transformed my whole bedroom vibe. The colors are so vivid and it arrives really fast.', date: 'February 2025', color: '#A855F7'},
+            {name: 'Isla W.', country: '🇸🇪', text: 'Perfect for my desk setup. The soft glow does not strain my eyes during late night study sessions. Looks incredible on camera too.', date: 'January 2025', color: '#6D28D9'},
+            {name: 'Nora J.', country: '🇧🇪', text: 'The lamp is even better in person. Super easy to set up and the remote works from across the room. My whole family wants one now.', date: 'January 2025', color: '#7C3AED'},
           ].map((r, i) => (
             <div key={i} className="tr-review-card">
-              <div className="tr-review-stars">★★★★★</div>
-              <p className="tr-review-text">"{r.text}"</p>
-              <div className="tr-review-meta">
-                <span className="tr-review-avatar">{r.name[0]}</span>
-                <div>
-                  <p className="tr-review-name">{r.name}</p>
-                  <p className="tr-review-date">{r.date}</p>
+              <div className="tr-review-card-top">
+                <div className="tr-review-avatar-wrap">
+                  <span className="tr-review-avatar" style={{background: r.color}}>{r.name[0]}</span>
+                </div>
+                <div className="tr-review-author">
+                  <p className="tr-review-name">{r.name} <span className="tr-review-country">{r.country}</span></p>
+                  <div className="tr-review-stars">★★★★★</div>
                 </div>
                 <span className="tr-review-verified">✓ Verified</span>
               </div>
+              <p className="tr-review-text">{r.text}</p>
+              <p className="tr-review-date">{r.date}</p>
             </div>
           ))}
         </div>
