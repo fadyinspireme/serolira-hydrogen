@@ -360,7 +360,7 @@ function RvCard({r}) {
   return (
     <div className="rv-card">
       <div className="rv-card-top">
-        <img src={r.photo} alt={r.name} className="rv-avatar" />
+        <div className="rv-avatar-initial">{r.name[0]}</div>
         <div className="rv-card-author">
           <p className="rv-name">{r.name}</p>
           <span className="rv-verified">
@@ -371,6 +371,9 @@ function RvCard({r}) {
       </div>
       <div className="rv-stars">★★★★★</div>
       <p className="rv-text">{r.text}</p>
+      {r.photo && (
+        <img src={r.photo} alt="Customer photo" className="rv-proof-img" />
+      )}
     </div>
   );
 }

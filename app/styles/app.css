@@ -2786,13 +2786,26 @@ html, body {
   gap: 0.6rem;
 }
 
-.rv-avatar {
-  width: 38px;
-  height: 38px;
+.rv-avatar-initial {
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  object-fit: cover;
+  background: linear-gradient(135deg, #A78BFA, #7C3AED);
+  color: white;
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  border: 2px solid rgba(167,139,250,0.2);
+}
+
+.rv-proof-img {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  max-height: 160px;
+  margin-top: 0.25rem;
 }
 
 .rv-card-author { flex: 1; min-width: 0; }
