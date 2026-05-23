@@ -12,6 +12,11 @@ import rev6 from '~/assets/Aa9a06ff4f03a4a22af30870a084d56daX.jpg_960x960q75.jpg
 import rev7 from '~/assets/Ab01fd8074a834921aedc493d0b7e53cbV.jpg_960x960q75.jpg_.avif';
 import rev8 from '~/assets/A3bfaabac835a49b8bbb6ae8b37012f6cW.jpg_960x960q75.jpg_.avif';
 import rev9 from '~/assets/A6ba5f1d98eeb46ddb735e8b4d1628113O.jpg_960x960q75.jpg_.avif';
+import rev10 from '~/assets/A0f38016eb1fd4a45ab295b897c870f53l.jpg_220x220.jpg_.avif';
+import rev11 from '~/assets/A706c4518aad540bc986f3bfd55544c78w.jpg_220x220.jpg_.avif';
+import rev12 from '~/assets/Acc755756305d461bb0510e2709a75977H.jpg_220x220.jpg_.avif';
+import rev13 from '~/assets/Aabe84dd3e074491b87988dec349bd4a4F.jpg_960x960q75.jpg_.avif';
+import rev14 from '~/assets/A45430c6c6f274be999d8972e139dbeedy.jpg_220x220.jpg_.avif';
 import {
   getSelectedProductOptions,
   Analytics,
@@ -354,6 +359,11 @@ const ALL_REVIEWS = [
   {name: 'Chloe', photo: rev7, text: 'The jellyfish design is so unique. It transforms the whole room energy.', date: 'February 2025'},
   {name: 'Isla', photo: rev8, text: 'Perfect for my desk. The soft glow does not strain my eyes at all.', date: 'January 2025'},
   {name: 'Nora', photo: rev9, text: 'Even better in person. Super easy to set up and the remote is great.', date: 'January 2025'},
+  {name: 'Mia', photo: rev10, text: 'Honestly the best thing I have bought for my room in years. The glow is magical.', date: 'May 2025'},
+  {name: 'Luna', photo: rev11, text: 'My desk setup went from boring to dreamy overnight. Worth every penny.', date: 'April 2025'},
+  {name: 'Ivy', photo: rev12, text: 'The colors are so rich and vivid. Nothing cheap about this lamp at all.', date: 'March 2025'},
+  {name: 'Grace', photo: rev13, text: 'I was skeptical at first but now I recommend it to literally everyone I know.', date: 'February 2025'},
+  {name: 'Jade', photo: rev14, text: 'The packaging was beautiful and the lamp exceeded all my expectations.', date: 'January 2025'},
 ];
 
 function RvCard({r}) {
@@ -379,9 +389,9 @@ function RvCard({r}) {
 }
 
 function ReviewsSection() {
-  const col1 = ALL_REVIEWS.slice(0, 3);
-  const col2 = ALL_REVIEWS.slice(3, 6);
-  const col3 = ALL_REVIEWS.slice(6, 9);
+  const col1 = ALL_REVIEWS.slice(0, 5);
+  const col2 = ALL_REVIEWS.slice(5, 10);
+  const col3 = ALL_REVIEWS.slice(10, 14);
   return (
     <section className="rv-section">
       <div className="rv-header">
