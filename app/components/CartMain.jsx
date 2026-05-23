@@ -59,7 +59,7 @@ function LxToggle({on}) {
   );
 }
 
-function UpsellCards({guarantee, onToggleGuarantee, shippingProtection, onToggleShipping}) {
+function UpsellCards({guarantee, onToggleGuarantee, shippingProtection, onToggleShipping, close}) {
   return (
     <div className="lx-upsells">
       <div
@@ -109,6 +109,21 @@ function UpsellCards({guarantee, onToggleGuarantee, shippingProtection, onToggle
           <LxToggle on={shippingProtection} />
         </div>
       </div>
+
+      <Link to="/products/estiera-aura-lamp" onClick={close} className="lx-bundle-deal">
+        <div className="lx-bundle-deal-left">
+          <div className="lx-bundle-deal-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+            </svg>
+          </div>
+          <div>
+            <p className="lx-bundle-deal-title">Choose Bundle Deal</p>
+            <p className="lx-bundle-deal-desc">Gain FREE Shipping + Save 15%</p>
+          </div>
+        </div>
+        <span className="lx-bundle-deal-arrow">→</span>
+      </Link>
     </div>
   );
 }
@@ -126,6 +141,7 @@ export function CartMain({layout, cart: originalCart}) {
   const subtotal = cart?.cost?.subtotalAmount?.amount || '0';
 
   if (layout === 'aside') {
+    const effectiveSubtotal = parseFloat(subtotal) + (shippingProtection ? 0.99 : 0);
     return (
       <div className="lx-cart">
         {!linesCount ? (
@@ -133,7 +149,7 @@ export function CartMain({layout, cart: originalCart}) {
         ) : (
           <>
             <div className="lx-cart-scroll">
-              <ShippingBar subtotal={subtotal} />
+              <ShippingBar subtotal={effectiveSubtotal} />
               <ul className="lx-cart-lines">
                 {(cart?.lines?.nodes ?? []).map((line) => {
                   if ('parentRelationship' in line && line.parentRelationship?.parent) return null;
@@ -152,6 +168,7 @@ export function CartMain({layout, cart: originalCart}) {
                 onToggleGuarantee={() => setGuarantee((g) => !g)}
                 shippingProtection={shippingProtection}
                 onToggleShipping={() => setShippingProtection((s) => !s)}
+                close={close}
               />
             </div>
             {cartHasItems && (
