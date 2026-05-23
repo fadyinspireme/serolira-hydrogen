@@ -259,7 +259,7 @@ export default function Product() {
 
           <div className="tr-vibe-header">
             <span className="tr-vibe-label">THE ESTIERA EXPERIENCE</span>
-            <h2 className="tr-vibe-title">Choose Your <span>ESTIERA</span> Vibe</h2>
+            <h2 className="tr-vibe-title">This is <span>ESTIERA</span> Aura Lamp</h2>
             <p className="tr-vibe-subtitle">Designed to transform every corner of your room.</p>
           </div>
 
