@@ -8,19 +8,18 @@ const PAYMENT_ICONS = [
   {key: 'amex', src: '/pay/amex.svg', alt: 'American Express'},
   {key: 'applepay', src: '/pay/applepay.svg', alt: 'Apple Pay'},
   {key: 'gpay', src: '/pay/gpay.svg', alt: 'Google Pay'},
-  {key: 'paypal', src: '/pay/paypal.svg', alt: 'PayPal'},
-  {key: 'klarna', src: '/pay/klarna.svg', alt: 'Klarna'},
-  {key: 'afterpay', src: '/pay/afterpay.svg', alt: 'Afterpay'},
-  {key: 'cb', src: '/pay/cb.svg', alt: 'CB'},
+  {key: 'bancontact', src: '/pay/bancontact.svg', alt: 'Bancontact'},
+  {key: 'ideal', src: '/pay/ideal.svg', alt: 'iDEAL'},
+  {key: 'cb', src: '/pay/cartes_bancaires.svg', alt: 'Cartes Bancaires'},
 ];
 
 function PaymentIcons() {
   return (
     <div className="lx-pay-icons">
       {PAYMENT_ICONS.map(({key, src, alt}) => (
-        <span key={key} className="lx-pay-icon-wrap">
-          <img src={src} alt={alt} width="34" height="22" loading="lazy" />
-        </span>
+        <div key={key} className="lx-pay-icon-wrap">
+          <img src={src} alt={alt} loading="lazy" />
+        </div>
       ))}
     </div>
   );
