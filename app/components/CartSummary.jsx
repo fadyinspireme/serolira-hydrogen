@@ -54,7 +54,7 @@ export function CartSummary({cart, layout, shippingProtection = false}) {
 
   const firstLine = cart?.lines?.nodes?.[0];
   const isBundle = (firstLine?.quantity ?? 0) >= 2;
-  const bundleSavings = isBundle ? 11.99 : 0;
+  const bundleSavings = isBundle ? 9.99 : 0;
   const total = subtotalNum - bundleSavings + (shippingProtection ? 0.99 : 0);
 
   return (
@@ -67,7 +67,7 @@ export function CartSummary({cart, layout, shippingProtection = false}) {
         {isBundle && (
           <div className="lx-summary-row lx-summary-row--discount">
             <span>Bundle Savings</span>
-            <span className="lx-summary-discount">−$11.99</span>
+            <span className="lx-summary-discount">−$9.99</span>
           </div>
         )}
         <div className="lx-summary-row">
