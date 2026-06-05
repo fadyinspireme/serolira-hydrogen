@@ -64,8 +64,8 @@ function loadDeferredData() {
 }
 
 const BUNDLES = [
-  {qty: 1, label: '1 Lamp', sublabel: '', price: 39.99, compareAt: 49.99, popular: false},
-  {qty: 2, label: '2 Lamps', sublabel: 'You save 15%', price: 67.99, compareAt: 79.98, popular: true},
+  {qty: 1, label: '1 Lamp', sublabel: '', price: 29.99, compareAt: 49.99, popular: false},
+  {qty: 2, label: '2 Lamps', sublabel: 'You save $10', price: 49.99, compareAt: 59.98, popular: true},
 ];
 
 function BundleSelector({selected, onSelect, image}) {
