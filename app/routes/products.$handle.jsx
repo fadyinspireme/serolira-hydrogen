@@ -45,6 +45,12 @@ export async function loader(args) {
   return {...deferredData, ...criticalData};
 }
 
+const EU_COUNTRIES = new Set([
+  'AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU',
+  'IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES',
+  'SE','NO','CH','GB','AL','RS','ME','MK','BA','IS','LI',
+]);
+
 async function loadCriticalData({context, params, request}) {
   const {handle} = params;
   const {storefront} = context;
@@ -56,22 +62,28 @@ async function loadCriticalData({context, params, request}) {
   ]);
   if (!product?.id) throw new Response(null, {status: 404});
   redirectIfHandleIsLocalized(request, {handle, data: product});
-  return {product};
+  const cfCountry = (request.headers.get('cf-ipcountry') ?? '').toUpperCase();
+  const isEU = EU_COUNTRIES.has(cfCountry);
+  const sym = isEU ? '€' : '$';
+  return {product, isEU, sym};
 }
 
 function loadDeferredData() {
   return {};
 }
 
-const BUNDLES = [
-  {qty: 1, label: '1 Lamp', sublabel: '', price: 29.99, compareAt: 49.99, popular: false},
-  {qty: 2, label: '2 Lamps', sublabel: 'You save $10', price: 49.99, compareAt: 59.98, popular: true},
-];
+function getBundles(sym) {
+  return [
+    {qty: 1, label: '1 Lamp', sublabel: '', price: 24.99, compareAt: 49.99, popular: false},
+    {qty: 2, label: '2 Lamps', sublabel: `Save ${sym}10`, price: 39.99, compareAt: 49.98, popular: true},
+  ];
+}
 
-function BundleSelector({selected, onSelect, image}) {
+function BundleSelector({selected, onSelect, image, sym}) {
+  const bundles = getBundles(sym);
   return (
     <div className="tr-bundles">
-      {BUNDLES.map((b) => (
+      {bundles.map((b) => (
         <button
           key={b.qty}
           type="button"
@@ -86,8 +98,8 @@ function BundleSelector({selected, onSelect, image}) {
           </div>
           <div className="tr-bundle-qty">{b.label}</div>
           <div className="tr-bundle-sublabel">{b.sublabel}</div>
-          <div className="tr-bundle-price">${b.price.toFixed(2)}</div>
-          {b.compareAt && <div className="tr-bundle-compare">${b.compareAt.toFixed(2)}</div>}
+          <div className="tr-bundle-price">{sym}{b.price.toFixed(2)}</div>
+          {b.compareAt && <div className="tr-bundle-compare">{sym}{b.compareAt.toFixed(2)}</div>}
         </button>
       ))}
     </div>
@@ -95,7 +107,7 @@ function BundleSelector({selected, onSelect, image}) {
 }
 
 export default function Product() {
-  const {product} = useLoaderData();
+  const {product, sym = '$'} = useLoaderData();
   const {open} = useAside();
   const [activeThumb, setActiveThumb] = useState(0);
   const [openAccordion, setOpenAccordion] = useState(null);
@@ -215,6 +227,7 @@ export default function Product() {
                 selected={selectedBundle}
                 onSelect={setSelectedBundle}
                 image={selectedVariant?.image?.url}
+                sym={sym}
               />
               <AddToCartButton
                 disabled={!selectedVariant || !selectedVariant.availableForSale}

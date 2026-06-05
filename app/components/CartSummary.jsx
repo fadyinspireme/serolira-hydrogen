@@ -54,7 +54,7 @@ export function CartSummary({cart, layout, shippingProtection = false}) {
 
   const firstLine = cart?.lines?.nodes?.[0];
   const isBundle = (firstLine?.quantity ?? 0) >= 2;
-  const bundleSavings = isBundle ? 9.99 : 0;
+  const bundleSavings = isBundle ? 9.99 : 0; // $49.98 - $39.99 = $9.99
   const total = subtotalNum - bundleSavings + (shippingProtection ? 0.99 : 0);
 
   return (

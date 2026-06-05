@@ -1,4 +1,13 @@
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+
+function useCurrencySymbol() {
+  const [sym, setSym] = useState('$');
+  useEffect(() => {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone ?? '';
+    if (/^Europe\//i.test(tz)) setSym('€');
+  }, []);
+  return sym;
+}
 import {useOptimisticCart, CartForm} from '@shopify/hydrogen';
 import {Link} from 'react-router';
 import {useAside} from '~/components/Aside';
@@ -64,6 +73,7 @@ function BundleDealCard({cartLine}) {
   const isBundle = (cartLine?.quantity ?? 0) >= 2;
   const lineId = cartLine?.id;
   const imageUrl = cartLine?.merchandise?.image?.url;
+  const sym = useCurrencySymbol();
 
   return (
     <CartForm
@@ -85,12 +95,12 @@ function BundleDealCard({cartLine}) {
         <div className="lx-bundle-body">
           <div className="lx-bundle-badges">
             <span className="lx-bundle-badge-free">FREE Shipping</span>
-            <span className="lx-bundle-badge-save">Save $10</span>
+            <span className="lx-bundle-badge-save">Save {sym}10</span>
           </div>
           <p className="lx-bundle-title">Buy 2 — Bundle Deal</p>
           <div className="lx-bundle-prices">
-            <span className="lx-bundle-price">$49.99</span>
-            <span className="lx-bundle-compare">$59.98</span>
+            <span className="lx-bundle-price">{sym}39.99</span>
+            <span className="lx-bundle-compare">{sym}49.98</span>
           </div>
         </div>
         <div className="lx-bundle-check">
