@@ -108,6 +108,7 @@ function BundleSelector({selected, onSelect, image, sym}) {
 
 export default function Product() {
   const {product, sym = '$'} = useLoaderData();
+  const images = product.images?.nodes ?? [];
   const {open} = useAside();
   const [activeThumb, setActiveThumb] = useState(0);
   const [openAccordion, setOpenAccordion] = useState(null);
@@ -165,19 +166,29 @@ export default function Product() {
           {/* LEFT — Gallery */}
           <div className="tr-gallery">
             <div className="tr-gallery-main">
-              <ProductImage image={selectedVariant?.image} />
+              {images.length > 0 ? (
+                <img
+                  src={images[activeThumb]?.url ?? images[0]?.url}
+                  alt={images[activeThumb]?.altText ?? product.title}
+                  className="tr-gallery-img"
+                />
+              ) : (
+                <ProductImage image={selectedVariant?.image} />
+              )}
             </div>
-            <div className="tr-gallery-thumbs">
-              {[0, 1, 2, 3, 4].map((i) => (
-                <button
-                  key={i}
-                  className={`tr-thumb${activeThumb === i ? ' tr-thumb--active' : ''}`}
-                  onClick={() => setActiveThumb(i)}
-                >
-                  <ProductImage image={selectedVariant?.image} />
-                </button>
-              ))}
-            </div>
+            {images.length > 1 && (
+              <div className="tr-gallery-thumbs">
+                {images.map((img, i) => (
+                  <button
+                    key={img.id}
+                    className={`tr-thumb${activeThumb === i ? ' tr-thumb--active' : ''}`}
+                    onClick={() => setActiveThumb(i)}
+                  >
+                    <img src={img.url} alt={img.altText ?? product.title} className="tr-thumb-img" />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* RIGHT — Info */}
@@ -476,6 +487,7 @@ const PRODUCT_FRAGMENT = `#graphql
   fragment Product on Product {
     id title vendor handle descriptionHtml description
     encodedVariantExistence encodedVariantAvailability
+    images(first: 10) { nodes { id url altText width height } }
     options {
       name
       optionValues {
