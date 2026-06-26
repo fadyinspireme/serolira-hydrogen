@@ -34,10 +34,10 @@ body {
   --bg-secondary: #FFFFFF;
   --text-primary: #1F1F1F;
   --text-secondary: #6B7280;
-  --accent-primary: #A78BFA;
-  --accent-secondary: #C4B5FD;
-  --btn-bg: #7C3AED;
-  --btn-hover: #6D28D9;
+  --accent-primary: #F0A0B0;
+  --accent-secondary: #FFD6DE;
+  --btn-bg: #D4748A;
+  --btn-hover: #BF6078;
   --border-color: #EAEAEA;
 }
 
@@ -62,9 +62,9 @@ h1, h2, h3 {
   font-size: 1.1rem;
   font-weight: 300;
   letter-spacing: 0.4em;
-  color: #A78BFA;
+  color: #F0A0B0;
   text-transform: uppercase;
-  text-shadow: 0 0 12px rgba(167, 139, 250, 0.5), 0 0 25px rgba(167, 139, 250, 0.25);
+  text-shadow: 0 0 12px rgba(240, 160, 176, 0.5), 0 0 25px rgba(240, 160, 176, 0.25);
 }
 
 .hero-section {
@@ -142,24 +142,24 @@ h1, h2, h3 {
   border: none;
 }
 .hp-btn--primary {
-  background: linear-gradient(135deg, #7C3AED, #5B21B6);
+  background: linear-gradient(135deg, #D4748A, #BF6078);
   color: white;
   padding: 0.85rem 2rem;
-  box-shadow: 0 4px 20px rgba(124,58,237,0.35);
+  box-shadow: 0 4px 20px rgba(212,116,138,0.35);
 }
 .hp-btn--primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(124,58,237,0.45);
+  box-shadow: 0 8px 28px rgba(212,116,138,0.45);
   color: white;
 }
 .hp-btn--ghost {
   background: transparent;
   color: var(--accent-primary);
   padding: 0.85rem 1.5rem;
-  border: 1.5px solid rgba(167,139,250,0.4);
+  border: 1.5px solid rgba(240,160,176,0.4);
 }
 .hp-btn--ghost:hover {
-  background: rgba(167,139,250,0.08);
+  background: rgba(240,160,176,0.08);
   border-color: var(--accent-primary);
 }
 .hp-btn--lg { padding: 1rem 2.8rem; font-size: 1rem; }
@@ -208,12 +208,12 @@ h1, h2, h3 {
 }
 .hp-hero-glow--1 {
   width: 500px; height: 500px;
-  background: radial-gradient(circle, rgba(124,58,237,0.18) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(240,160,176,0.18) 0%, transparent 70%);
   top: -100px; left: -100px;
 }
 .hp-hero-glow--2 {
   width: 400px; height: 400px;
-  background: radial-gradient(circle, rgba(196,181,253,0.15) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255,214,222,0.15) 0%, transparent 70%);
   bottom: -80px; right: 10%;
 }
 .hp-hero-content {
@@ -438,12 +438,12 @@ h1, h2, h3 {
   width: 56px;
   height: 56px;
   border-radius: 16px;
-  background: linear-gradient(135deg, #EDE9FE, #DDD6FE);
+  background: linear-gradient(135deg, #FFE8EE, #FFD6DE);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1rem;
-  color: #7C3AED;
+  color: #D4748A;
 }
 .hp-hiw-num {
   position: absolute;
@@ -497,6 +497,19 @@ h1, h2, h3 {
   object-fit: cover;
   flex-shrink: 0;
 }
+.hp-review-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #F0A0B0, #D4748A);
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
 .hp-review-name {
   font-size: 0.9rem;
   font-weight: 600;
@@ -518,7 +531,7 @@ h1, h2, h3 {
 
 /* ── CTA Banner ── */
 .hp-cta {
-  background: linear-gradient(135deg, #1a0533, #2d1060);
+  background: linear-gradient(135deg, #1a080e, #2d1018);
   padding: 8rem 5vw;
   text-align: center;
   position: relative;
@@ -527,7 +540,7 @@ h1, h2, h3 {
 .hp-cta-glow {
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at center, rgba(124,58,237,0.4) 0%, transparent 65%);
+  background: radial-gradient(ellipse at center, rgba(212,116,138,0.4) 0%, transparent 65%);
   pointer-events: none;
 }
 .hp-cta-eyebrow {

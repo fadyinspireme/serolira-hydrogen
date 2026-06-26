@@ -1,12 +1,6 @@
 import {Link, useLoaderData} from 'react-router';
-import rev1 from '~/assets/A45430c6c6f274be999d8972e139dbeedy.jpg_960x960q75.jpg_.avif';
-import rev2 from '~/assets/A2007cc2bd40b42a3a537a4e09709c21aM.jpg_960x960q75.jpg_.avif';
-import rev3 from '~/assets/A7213df92cb8a41ff9c24abd11c1c48c19.jpg_960x960q75.jpg_.avif';
-import rev4 from '~/assets/A0639b5e9961f45f29377128d7a11b765A.jpg_960x960q75.jpg_.avif';
-import rev5 from '~/assets/A7a5659d5b86842d9ae186efa3ddd8edbL.jpg_960x960q75.jpg_.avif';
-import rev6 from '~/assets/Aa9a06ff4f03a4a22af30870a084d56daX.jpg_960x960q75.jpg_.avif';
 
-export const meta = () => [{title: 'Estiera | Aesthetic Room Decor'}];
+export const meta = () => [{title: 'Serolira | Professional 4K Camera'}];
 
 export async function loader({context}) {
   const {storefront} = context;
@@ -47,13 +41,13 @@ function HeroSection({product}) {
       <div className="hp-hero-glow hp-hero-glow--1" />
       <div className="hp-hero-glow hp-hero-glow--2" />
       <div className="hp-hero-content">
-        <p className="hp-hero-eyebrow">✦ Ambient Lighting · Room Decor</p>
+        <p className="hp-hero-eyebrow">✦ Professional · Portable · 4K Ultra HD</p>
         <h1 className="hp-hero-title">
-          Transform your room<br />into a <em>sanctuary</em>.
+          Capture every moment<br />in <em>stunning clarity</em>.
         </h1>
         <p className="hp-hero-sub">
-          The Aura Lamp bathes your space in calming, colour-shifting light —
-          designed for those who live beautifully.
+          The Serolira 4K Camera delivers cinema-quality footage in the palm
+          of your hand — built for creators who refuse to compromise.
         </p>
         <div className="hp-hero-actions">
           <Link to={product ? `/products/${product.handle}` : '/collections/all'} className="hp-btn hp-btn--primary">
@@ -65,7 +59,7 @@ function HeroSection({product}) {
         </div>
         <div className="hp-hero-stars">
           <span>★★★★★</span>
-          <span>4.9 · Trusted by 10,000+ customers</span>
+          <span>4.9 · Trusted by 8,000+ creators</span>
         </div>
       </div>
       {product?.featuredImage && (
@@ -84,8 +78,8 @@ function HeroSection({product}) {
 
 function TrustBar() {
   const items = [
-    {icon: '🚚', label: 'Free Worldwide Shipping', sub: 'On orders over $60'},
-    {icon: '⭐', label: '4.9 / 5 Rating', sub: 'From 2,400+ reviews'},
+    {icon: '📦', label: 'Free Worldwide Shipping', sub: 'On all orders'},
+    {icon: '⭐', label: '4.9 / 5 Rating', sub: 'From 3,200+ reviews'},
     {icon: '🔄', label: '30-Day Returns', sub: 'No questions asked'},
     {icon: '🔒', label: 'Secure Checkout', sub: 'SSL encrypted'},
   ];
@@ -106,11 +100,11 @@ function TrustBar() {
 
 function ProductFeature({product}) {
   const features = [
-    'Colour-shifting RGB ambient light',
-    'Whisper-quiet, no heat emitted',
-    'USB-powered — works anywhere',
-    'Ideal for bedroom, desk & living room',
-    'Calming jellyfish motion effect',
+    '4K Ultra HD video at 60fps',
+    'Built-in image stabilization (OIS)',
+    'Night vision & low-light enhancement',
+    'Compact & lightweight — fits anywhere',
+    'Wide-angle lens with 170° field of view',
   ];
   const price = product?.priceRange?.minVariantPrice;
   return (
@@ -128,7 +122,7 @@ function ProductFeature({product}) {
       </div>
       <div className="hp-feature-info">
         <p className="hp-feature-eyebrow">✦ Featured Product</p>
-        <h2 className="hp-feature-title">{product?.title ?? 'Aura Lamp'}</h2>
+        <h2 className="hp-feature-title">{product?.title ?? 'Serolira 4K Camera'}</h2>
         {price && (
           <p className="hp-feature-price">
             ${parseFloat(price.amount).toFixed(2)} {price.currencyCode}
@@ -138,7 +132,7 @@ function ProductFeature({product}) {
           {features.map((f) => (
             <li key={f} className="hp-feature-item">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="11" fill="#7C3AED" />
+                <circle cx="12" cy="12" r="11" fill="#F0A0B0" />
                 <polyline points="7 12 10 15 17 9" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
               </svg>
               {f}
@@ -160,48 +154,45 @@ function HowItWorks() {
   const steps = [
     {
       n: '01',
-      title: 'Choose your mood',
-      desc: 'Browse 16 breathtaking colour modes — from deep ocean blue to soft sunset rose.',
+      title: 'Power on & connect',
+      desc: 'Turn on your Serolira camera and pair it with the app in seconds — no cables needed.',
       icon: (
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="5"/>
-          <line x1="12" y1="1" x2="12" y2="3"/>
-          <line x1="12" y1="21" x2="12" y2="23"/>
-          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
-          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
-          <line x1="1" y1="12" x2="3" y2="12"/>
-          <line x1="21" y1="12" x2="23" y2="12"/>
-          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
-          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
         </svg>
       ),
     },
     {
       n: '02',
-      title: 'Place & plug in',
-      desc: 'Set it on your desk, shelf, or nightstand. Plug into any USB port — it\'s instant.',
+      title: 'Frame your shot',
+      desc: 'Use the wide-angle 170° lens to capture expansive landscapes, action scenes, or tight close-ups.',
       icon: (
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 22V12M12 12C12 9 9 7 6 7M12 12C12 9 15 7 18 7"/>
-          <rect x="3" y="3" width="6" height="4" rx="1"/>
-          <rect x="15" y="3" width="6" height="4" rx="1"/>
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
         </svg>
       ),
     },
     {
       n: '03',
-      title: 'Feel the vibe',
-      desc: 'Watch your room transform. Perfect for relaxing, working, or setting the scene.',
+      title: 'Share instantly',
+      desc: 'Export in 4K, edit on mobile, and share directly to YouTube, Instagram, or TikTok.',
       icon: (
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/>
+          <circle cx="18" cy="5" r="3"/>
+          <circle cx="6" cy="12" r="3"/>
+          <circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
         </svg>
       ),
     },
   ];
   return (
     <section className="hp-hiw">
-      <p className="hp-section-eyebrow">✦ Simple Setup</p>
+      <p className="hp-section-eyebrow">✦ Dead Simple</p>
       <h2 className="hp-section-title">How It Works</h2>
       <div className="hp-hiw-steps">
         {steps.map((s) => (
@@ -220,52 +211,46 @@ function HowItWorks() {
 function ReviewStrip() {
   const reviews = [
     {
-      img: rev1,
-      name: 'Sofia M.',
+      name: 'Marcus T.',
       stars: 5,
-      text: 'Absolutely obsessed. My room looks like something out of a Pinterest board. Worth every penny!',
+      text: 'Insane quality for the price. Shoots 4K at 60fps smoothly — no shaking, no noise. This replaced my DSLR.',
     },
     {
-      img: rev3,
-      name: 'Emma R.',
+      name: 'Priya S.',
       stars: 5,
-      text: 'The colours are so vivid and calming at the same time. Sleep with it on every night.',
+      text: 'Used it for a travel vlog and people keep asking what camera I shot with. Night mode is unreal.',
     },
     {
-      img: rev5,
-      name: 'Ava K.',
+      name: 'Jake W.',
       stars: 5,
-      text: 'Got it as a gift and now my whole friend group wants one. Shipping was super fast too!',
+      text: 'Compact, powerful, and the app integration is seamless. Best camera I\'ve owned at this price point.',
     },
     {
-      img: rev2,
-      name: 'Mia L.',
+      name: 'Elena M.',
       stars: 5,
-      text: 'Perfect for my home office. Reduces stress and makes video calls look incredible.',
+      text: 'The stabilization is magic. I was running and the footage looks like I was gliding. Truly impressive.',
     },
     {
-      img: rev4,
-      name: 'Luna P.',
+      name: 'Carlos R.',
       stars: 5,
-      text: 'I was skeptical but wow — this thing is magical. My room feels like a spa now.',
+      text: 'Shot an entire short film with this. The colors are vivid and dynamic range is better than expected.',
     },
     {
-      img: rev6,
-      name: 'Zoe T.',
+      name: 'Yuki N.',
       stars: 5,
-      text: 'Bought two — one for my room and one for my sister. She cried happy tears 😭✨',
+      text: 'Bought for my YouTube channel. Upload quality is flawless and my subscribers noticed immediately.',
     },
   ];
   return (
     <section className="hp-reviews">
-      <p className="hp-section-eyebrow">✦ Real Customers</p>
-      <h2 className="hp-section-title">People Are Obsessed</h2>
-      <p className="hp-section-sub">Join 10,000+ happy customers worldwide</p>
+      <p className="hp-section-eyebrow">✦ Real Creators</p>
+      <h2 className="hp-section-title">Creators Are Obsessed</h2>
+      <p className="hp-section-sub">Join 8,000+ happy creators worldwide</p>
       <div className="hp-reviews-grid">
         {reviews.map((r) => (
           <div key={r.name} className="hp-review-card">
             <div className="hp-review-top">
-              <img src={r.img} alt={r.name} className="hp-review-img" />
+              <div className="hp-review-avatar">{r.name[0]}</div>
               <div>
                 <p className="hp-review-name">{r.name}</p>
                 <p className="hp-review-stars">{'★'.repeat(r.stars)}</p>
@@ -284,8 +269,8 @@ function CtaBanner({product}) {
     <section className="hp-cta">
       <div className="hp-cta-glow" />
       <p className="hp-cta-eyebrow">✦ Limited Stock</p>
-      <h2 className="hp-cta-title">Your dream room is<br />one click away.</h2>
-      <p className="hp-cta-sub">Free worldwide shipping · 30-day returns · Trusted by 10,000+</p>
+      <h2 className="hp-cta-title">Professional 4K footage<br />starts here.</h2>
+      <p className="hp-cta-sub">Free worldwide shipping · 30-day returns · Trusted by 8,000+ creators</p>
       <Link
         to={product ? `/products/${product.handle}` : '/collections/all'}
         className="hp-btn hp-btn--primary hp-btn--lg"

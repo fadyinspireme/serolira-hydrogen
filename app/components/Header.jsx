@@ -19,7 +19,7 @@ export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
         </svg>
       </button>
       <NavLink prefetch="intent" to="/" className="header-logo header-logo-center" end>
-        <span className="logo-text">Estiera</span>
+        <span className="logo-text">Serolira</span>
       </NavLink>
       <CartToggle cart={cart} />
     </header>
