@@ -1,22 +1,6 @@
 import {useLoaderData} from 'react-router';
-import {useState} from 'react';
-import vibeVideo1 from '~/assets/17e0c80ecc57c5e1a9e89a24b4ec6f9b.mp4';
-import vibeVideo2 from '~/assets/1cf64b4164ca5b88e8ab2d9ee52f3573.mp4';
-import vibeVideo3 from '~/assets/c32d79e0f514ea354faf22eba3f7a849_720w.mp4';
-import rev1 from '~/assets/A45430c6c6f274be999d8972e139dbeedy.jpg_960x960q75.jpg_.avif';
-import rev2 from '~/assets/A2007cc2bd40b42a3a537a4e09709c21aM.jpg_960x960q75.jpg_.avif';
-import rev3 from '~/assets/A7213df92cb8a41ff9c24abd11c1c48c19.jpg_960x960q75.jpg_.avif';
-import rev4 from '~/assets/A0639b5e9961f45f29377128d7a11b765A.jpg_960x960q75.jpg_.avif';
-import rev5 from '~/assets/A7a5659d5b86842d9ae186efa3ddd8edbL.jpg_960x960q75.jpg_.avif';
-import rev6 from '~/assets/Aa9a06ff4f03a4a22af30870a084d56daX.jpg_960x960q75.jpg_.avif';
-import rev7 from '~/assets/Ab01fd8074a834921aedc493d0b7e53cbV.jpg_960x960q75.jpg_.avif';
-import rev8 from '~/assets/A3bfaabac835a49b8bbb6ae8b37012f6cW.jpg_960x960q75.jpg_.avif';
-import rev9 from '~/assets/A6ba5f1d98eeb46ddb735e8b4d1628113O.jpg_960x960q75.jpg_.avif';
-import rev10 from '~/assets/A0f38016eb1fd4a45ab295b897c870f53l.jpg_220x220.jpg_.avif';
-import rev11 from '~/assets/A706c4518aad540bc986f3bfd55544c78w.jpg_220x220.jpg_.avif';
-import rev12 from '~/assets/Acc755756305d461bb0510e2709a75977H.jpg_220x220.jpg_.avif';
-import rev13 from '~/assets/Aabe84dd3e074491b87988dec349bd4a4F.jpg_960x960q75.jpg_.avif';
-import rev14 from '~/assets/A45430c6c6f274be999d8972e139dbeedy.jpg_220x220.jpg_.avif';
+import {useState, useEffect, useRef} from 'react';
+import {useNavigate} from 'react-router';
 import {
   getSelectedProductOptions,
   Analytics,
@@ -24,17 +8,29 @@ import {
   getProductOptions,
   getAdjacentAndFirstAvailableVariants,
   useSelectedOptionInUrlParam,
+  Money,
 } from '@shopify/hydrogen';
-import {ProductPrice} from '~/components/ProductPrice';
-import {ProductImage} from '~/components/ProductImage';
-import {ProductForm} from '~/components/ProductForm';
 import {AddToCartButton} from '~/components/AddToCartButton';
 import {useAside} from '~/components/Aside';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 
+const SWATCH_COLORS = {
+  'Blossom Pink': '#F0A0B0',
+  'Pearl White': '#E8E8E8',
+  'Lavender': '#B89EC4',
+  'Mint': '#7ECDB5',
+  'Noir': '#1a1a1a',
+  'Black': '#1a1a1a',
+  'White': '#E8E8E8',
+  'Pink': '#F0A0B0',
+  'Purple': '#B89EC4',
+  'Green': '#7ECDB5',
+  'Rose': '#F0A0B0',
+};
+
 export const meta = ({data}) => {
   return [
-    {title: `Estiera | ${data?.product.title ?? ''}`},
+    {title: `Serolira | ${data?.product.title ?? ''}`},
     {rel: 'canonical', href: `/products/${data?.product.handle}`},
   ];
 };
@@ -44,12 +40,6 @@ export async function loader(args) {
   const criticalData = await loadCriticalData(args);
   return {...deferredData, ...criticalData};
 }
-
-const EU_COUNTRIES = new Set([
-  'AT','BE','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU',
-  'IE','IT','LV','LT','LU','MT','NL','PL','PT','RO','SK','SI','ES',
-  'SE','NO','CH','GB','AL','RS','ME','MK','BA','IS','LI',
-]);
 
 async function loadCriticalData({context, params, request}) {
   const {handle} = params;
@@ -62,57 +52,22 @@ async function loadCriticalData({context, params, request}) {
   ]);
   if (!product?.id) throw new Response(null, {status: 404});
   redirectIfHandleIsLocalized(request, {handle, data: product});
-  const cfCountry = (request.headers.get('cf-ipcountry') ?? '').toUpperCase();
-  const isEU = EU_COUNTRIES.has(cfCountry);
-  const sym = isEU ? '€' : '$';
-  return {product, isEU, sym};
+  return {product};
 }
 
 function loadDeferredData() {
   return {};
 }
 
-function getBundles(sym) {
-  return [
-    {qty: 1, label: '1 Lamp', sublabel: '', price: 24.99, compareAt: 49.99, popular: false},
-    {qty: 2, label: '2 Lamps', sublabel: `Save ${sym}10`, price: 39.99, compareAt: 49.98, popular: true},
-  ];
-}
-
-function BundleSelector({selected, onSelect, image, sym}) {
-  const bundles = getBundles(sym);
-  return (
-    <div className="tr-bundles">
-      {bundles.map((b) => (
-        <button
-          key={b.qty}
-          type="button"
-          className={`tr-bundle-card${selected === b.qty ? ' tr-bundle-card--active' : ''}`}
-          onClick={() => onSelect(b.qty)}
-        >
-          {b.popular && <div className="tr-bundle-badge">Most Popular</div>}
-          <div className="tr-bundle-imgs">
-            {Array(b.qty).fill(null).map((_, i) => (
-              image ? <img key={i} src={image} alt="lamp" className="tr-bundle-img" /> : <span key={i} className="tr-bundle-emoji">💡</span>
-            ))}
-          </div>
-          <div className="tr-bundle-qty">{b.label}</div>
-          <div className="tr-bundle-sublabel">{b.sublabel}</div>
-          <div className="tr-bundle-price">{sym}{b.price.toFixed(2)}</div>
-          {b.compareAt && <div className="tr-bundle-compare">{sym}{b.compareAt.toFixed(2)}</div>}
-        </button>
-      ))}
-    </div>
-  );
-}
-
 export default function Product() {
-  const {product, sym = '$'} = useLoaderData();
-  const images = product.images?.nodes ?? [];
+  const {product} = useLoaderData();
+  const navigate = useNavigate();
   const {open} = useAside();
   const [activeThumb, setActiveThumb] = useState(0);
-  const [openAccordion, setOpenAccordion] = useState(null);
-  const [selectedBundle, setSelectedBundle] = useState(2);
+  const [openFaq, setOpenFaq] = useState(null);
+  const [specsOpen, setSpecsOpen] = useState(false);
+  const [stickyVisible, setStickyVisible] = useState(false);
+  const addBtnRef = useRef(null);
 
   const selectedVariant = useOptimisticVariant(
     product.selectedOrFirstAvailableVariant,
@@ -126,348 +81,328 @@ export default function Product() {
     selectedOrFirstAvailableVariant: selectedVariant,
   });
 
-  const {title, descriptionHtml} = product;
+  const images = product.images?.nodes ?? [];
 
-  const accordionItems = [
-    {
-      label: 'Description',
-      content: <div>
-          <p>Transform your space with the ESTIERA Aura Lamp — a premium ambient light designed to bring elegance, warmth, and atmosphere to any room. Inspired by the calm beauty of the ocean, its minimalist floating design creates a soft glow that instantly upgrades your setup and makes every space feel more refined.</p>
-          <br/>
-          <p>With 16 immersive RGB colors and an easy-to-use remote control, you can customize the perfect mood for relaxing nights, late gaming sessions, or modern room decor.</p>
-          <br/>
-          <ul className="desc-features">
-            {['16 customizable RGB colors','Soft calming ambient glow','Elegant minimalist design','Remote control included','Perfect for bedrooms, desks & modern interiors'].map((f, i) => (
-              <li key={i} className="desc-feature-item">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                {f}
-              </li>
-            ))}
-          </ul>
-        </div>,
-    },
-    {
-      label: 'What is included',
-      content: <p>1x RGB Jellyfish Lamp, 1x Wireless Remote Control, 1x USB Power Cable, 1x User Guide.</p>,
-    },
-    {
-      label: 'Shipping & Returns',
-      content: <p>Orders are processed within 1–2 business days and delivered within 5–8 business days. Free worldwide shipping on orders over $60. 30-day hassle-free returns.</p>,
-    },
-  ];
+  const colorOption = productOptions.find(o =>
+    ['Color', 'Culoare', 'Colour'].includes(o.name)
+  ) || (productOptions.length > 0 ? productOptions[0] : null);
+
+  useEffect(() => {
+    const handler = () => {
+      if (addBtnRef.current) {
+        setStickyVisible(addBtnRef.current.getBoundingClientRect().bottom < 0);
+      }
+    };
+    window.addEventListener('scroll', handler, {passive: true});
+    return () => window.removeEventListener('scroll', handler);
+  }, []);
+
+  useEffect(() => {
+    setActiveThumb(0);
+  }, [selectedVariant?.id]);
+
+  const activeColorName = selectedVariant?.selectedOptions?.find(
+    o => ['Color', 'Culoare', 'Colour'].includes(o.name)
+  )?.value ?? '';
+
+  const cartLines = selectedVariant
+    ? [{merchandiseId: selectedVariant.id, quantity: 1, selectedVariant}]
+    : [];
 
   return (
-    <div className="tr-page">
+    <div className="srl-page">
 
-      {/* ── MAIN PRODUCT SECTION ── */}
-      <section className="tr-product">
-        <div className="tr-product-inner">
+      {/* ── PRODUCT ── */}
+      <section className="srl-product">
 
-          {/* LEFT — Gallery */}
-          <div className="tr-gallery">
-            <div className="tr-gallery-main">
-              {images.length > 0 ? (
-                <img
-                  src={images[activeThumb]?.url ?? images[0]?.url}
-                  alt={images[activeThumb]?.altText ?? product.title}
-                  className="tr-gallery-img"
-                />
-              ) : (
-                <ProductImage image={selectedVariant?.image} />
-              )}
-            </div>
-            {images.length > 1 && (
-              <div className="tr-gallery-thumbs">
-                {images.map((img, i) => (
-                  <button
-                    key={img.id}
-                    className={`tr-thumb${activeThumb === i ? ' tr-thumb--active' : ''}`}
-                    onClick={() => setActiveThumb(i)}
-                  >
-                    <img src={img.url} alt={img.altText ?? product.title} className="tr-thumb-img" />
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* RIGHT — Info */}
-          <div className="tr-info">
-
-            {/* Rating */}
-            <div className="tr-rating">
-              <span className="tr-stars">★★★★★</span>
-              <span className="tr-rating-count">Rated 4.9 (238)</span>
-              <span className="tr-rating-badge">Happy Customers</span>
-            </div>
-
-            {/* Title */}
-            <h1 className="tr-title">{title}</h1>
-
-            {/* Feature badges */}
-            <div className="tr-badges">
-              <div className="tr-badge">
-                <span className="tr-badge-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-                </span>
-                <span>16 RGB Colors</span>
-              </div>
-              <div className="tr-badge">
-                <span className="tr-badge-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="6" y="2" width="12" height="20" rx="3"/><circle cx="12" cy="17" r="1"/><path d="M9 7h6M9 11h6"/></svg>
-                </span>
-                <span>Remote Control</span>
-              </div>
-              <div className="tr-badge">
-                <span className="tr-badge-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10"/><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="3"/></svg>
-                </span>
-                <span>Calming Glow</span>
-              </div>
-              <div className="tr-badge">
-                <span className="tr-badge-icon">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
-                </span>
-                <span>Aesthetic Decor</span>
-              </div>
-            </div>
-
-            {/* Bundle selector + add to cart */}
-            <div className="tr-form">
-              <BundleSelector
-                selected={selectedBundle}
-                onSelect={setSelectedBundle}
-                image={selectedVariant?.image?.url}
-                sym={sym}
+        {/* GALLERY */}
+        <div className="srl-gallery">
+          <div className="srl-gallery-main">
+            {images.length > 0 ? (
+              <img
+                key={images[activeThumb]?.id}
+                src={images[activeThumb]?.url ?? images[0]?.url}
+                alt={images[activeThumb]?.altText ?? product.title}
+                className="srl-gallery-img"
               />
-              <AddToCartButton
-                disabled={!selectedVariant || !selectedVariant.availableForSale}
-                onClick={() => open('cart')}
-                lines={selectedVariant ? [{merchandiseId: selectedVariant.id, quantity: selectedBundle, selectedVariant}] : []}
-              >
-                <span className="atc-btn-inner">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
-                  </svg>
-                  {selectedVariant?.availableForSale ? 'ADD TO CART' : 'SOLD OUT'}
-                </span>
-              </AddToCartButton>
-            </div>
-
-            {/* Trust row */}
-            <div className="tr-trust">
-              <div className="tr-trust-item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-                <span>Carefully Packed</span>
-              </div>
-              <div className="tr-trust-sep" />
-              <div className="tr-trust-item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.5"/></svg>
-                <span>30-Day Returns</span>
-              </div>
-              <div className="tr-trust-sep" />
-              <div className="tr-trust-item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                <span>Secure Checkout</span>
-              </div>
-            </div>
-
-            {/* Accordion */}
-            <div className="tr-accordion">
-              {accordionItems.map((item, i) => (
-                <div key={i} className={`tr-acc-item${openAccordion === i ? ' tr-acc-item--open' : ''}`}>
-                  <button
-                    className="tr-acc-trigger"
-                    onClick={() => setOpenAccordion(openAccordion === i ? null : i)}
-                  >
-                    <span>{item.label}</span>
-                    <span className="tr-acc-icon">{openAccordion === i ? '−' : '+'}</span>
-                  </button>
-                  {openAccordion === i && (
-                    <div className="tr-acc-body">{item.content}</div>
-                  )}
-                </div>
+            ) : selectedVariant?.image ? (
+              <img src={selectedVariant.image.url} alt={product.title} className="srl-gallery-img" />
+            ) : null}
+            <span className="srl-sale-chip">Summer Sale</span>
+          </div>
+          {images.length > 1 && (
+            <div className="srl-thumbs">
+              {images.map((img, i) => (
+                <button
+                  key={img.id}
+                  className={`srl-thumb${activeThumb === i ? ' srl-thumb--active' : ''}`}
+                  onClick={() => setActiveThumb(i)}
+                >
+                  <img src={img.url} alt={img.altText ?? product.title} />
+                </button>
               ))}
             </div>
+          )}
+        </div>
+
+        {/* DETAILS */}
+        <div className="srl-details">
+          <div className="srl-details-top">
+            <div className="srl-rating-row">
+              <span className="srl-stars">★★★★★</span>
+              <span className="srl-rating-text">4.9 <span className="srl-rating-sold">(500+ Sold)</span></span>
+            </div>
+            <h1 className="srl-title">{product.title}</h1>
+            <div className="srl-price-row">
+              <span className="srl-price-now">
+                <Money data={selectedVariant.price} />
+              </span>
+              {selectedVariant?.compareAtPrice && (
+                <span className="srl-price-was">
+                  <Money data={selectedVariant.compareAtPrice} />
+                </span>
+              )}
+            </div>
+            <span className="srl-sale-note">Summer Deal — Offer Expires Soon</span>
+          </div>
+
+          {/* Color Swatches */}
+          {colorOption && colorOption.optionValues.length > 1 && (
+            <>
+              <p className="srl-section-label">Color</p>
+              <div className="srl-colors-row">
+                {colorOption.optionValues.map((val) => {
+                  const swatchColor = val.swatch?.color || SWATCH_COLORS[val.name] || '#ccc';
+                  const isLight = val.name.toLowerCase().includes('white') || val.name.toLowerCase().includes('pearl');
+                  return (
+                    <button
+                      key={val.name}
+                      type="button"
+                      className={`srl-swatch${val.selected ? ' srl-swatch--active' : ''}`}
+                      disabled={!val.exists}
+                      style={{opacity: val.available ? 1 : 0.4}}
+                      onClick={() => {
+                        if (!val.selected) {
+                          void navigate(`?${val.variantUriQuery}`, {
+                            replace: true,
+                            preventScrollReset: true,
+                          });
+                        }
+                      }}
+                    >
+                      <span
+                        className="srl-swatch-inner"
+                        style={{
+                          background: swatchColor,
+                          border: isLight ? '1px solid #ccc' : 'none',
+                        }}
+                      />
+                    </button>
+                  );
+                })}
+              </div>
+              {activeColorName && (
+                <p className="srl-color-name">{activeColorName}</p>
+              )}
+            </>
+          )}
+
+          {/* Urgency */}
+          <div className="srl-urgency">
+            <span className="srl-urgency-dot" />
+            <span className="srl-urgency-text">
+              <strong>Only 9 left</strong> at this price
+            </span>
+          </div>
+
+          {/* Add to Bag */}
+          <div ref={addBtnRef} className="srl-atc-wrap">
+            <AddToCartButton
+              disabled={!selectedVariant?.availableForSale}
+              onClick={() => open('cart')}
+              lines={cartLines}
+            >
+              {selectedVariant?.availableForSale ? 'Add to Bag' : 'Sold Out'}
+            </AddToCartButton>
+          </div>
+
+          {/* Services */}
+          <div className="srl-services">
+            {[
+              {text: 'Free Shipping', sub: 'On all orders — worldwide'},
+              {text: 'Free Returns', sub: '30-day hassle-free policy'},
+              {text: '32GB Memory Card Included', sub: 'Ready to shoot out of the box'},
+            ].map((s, i) => (
+              <div key={i} className="srl-service-row">
+                <svg className="srl-service-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M5 12l5 5L20 7"/>
+                </svg>
+                <div className="srl-service-text">
+                  {s.text}
+                  <span>{s.sub}</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── VIBE GALLERY ── */}
-      <section className="tr-vibe">
-        <div className="tr-vibe-inner">
-
-          <div className="tr-vibe-header">
-            <span className="tr-vibe-label">THE ESTIERA EXPERIENCE</span>
-            <h2 className="tr-vibe-title">This is <span>ESTIERA</span> Aura Lamp</h2>
-            <p className="tr-vibe-subtitle">Designed to transform every corner of your room.</p>
+      {/* ── SPECS ── */}
+      <section className="srl-specs-section">
+        <button
+          className={`srl-acc-header${specsOpen ? ' open' : ''}`}
+          onClick={() => setSpecsOpen(s => !s)}
+        >
+          <span className="srl-acc-title">Camera Specifications</span>
+          <svg className="srl-acc-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+        </button>
+        <div className={`srl-acc-body${specsOpen ? ' open' : ''}`}>
+          <div className="srl-specs-grid">
+            {[
+              ['Resolution', '4K Ultra HD'],
+              ['Battery Life', '220 min'],
+              ['Memory Card', '32 GB'],
+              ['Zoom', '16× Digital'],
+              ['Weight', '280g'],
+              ['Charge Time', '60 min'],
+              ['Stabilization', 'Built-in EIS'],
+              ['Colors', '5 Variants'],
+            ].map(([label, val]) => (
+              <div key={label} className="srl-spec-row">
+                <p className="srl-spec-label">{label}</p>
+                <p className="srl-spec-val">{val}</p>
+              </div>
+            ))}
           </div>
-
-          <div className="tr-vibe-cards-wrap">
-            <div className="tr-vibe-cards">
-              {[
-                {title: 'Cozy Night Setup', tag: 'Bedroom', src: vibeVideo1},
-                {title: 'Minimal Desk Vibes', tag: 'Workspace', src: vibeVideo2},
-                {title: 'Late Night Glow', tag: 'Ambiance', src: vibeVideo3},
-              ].map((card, i) => (
-                <div key={i} className="tr-vibe-card">
-                  <div className="tr-vibe-visual">
-                    <video
-                      className="tr-vibe-video"
-                      src={card.src}
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                    />
-                    <div className="tr-vibe-overlay" />
-                    <div className="tr-vibe-card-bottom">
-                      <span className="tr-vibe-tag">{card.tag}</span>
-                      <h3 className="tr-vibe-card-title">{card.title}</h3>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-
         </div>
       </section>
 
       {/* ── REVIEWS ── */}
-      <ReviewsSection />
+      <SrlReviews />
 
       {/* ── FAQ ── */}
-      <section className="tr-faq">
-        <h2 className="tr-faq-title">Frequently Asked Questions</h2>
-        <FAQList />
+      <section className="srl-faq-section">
+        <h2 className="srl-faq-title">Frequently Asked Questions</h2>
+        {SRL_FAQS.map((item, i) => (
+          <div key={i} className={`srl-faq-item${openFaq === i ? ' open' : ''}`}>
+            <button className="srl-faq-q" onClick={() => setOpenFaq(openFaq === i ? null : i)}>
+              <span className="srl-faq-q-text">{item.q}</span>
+              <span className="srl-faq-icon">+</span>
+            </button>
+            <p className="srl-faq-a">{item.a}</p>
+          </div>
+        ))}
       </section>
 
-      {/* ── FINAL CTA ── */}
-      <section className="tr-final">
-        <div className="tr-final-inner">
-          <h2 className="tr-final-title">Ready to transform your room?</h2>
-          <p className="tr-final-sub">Join thousands of aesthetic bedroom lovers who chose Estiera.</p>
-          <ProductForm productOptions={productOptions} selectedVariant={selectedVariant} />
-        </div>
+      {/* ── CONTACT ── */}
+      <section className="srl-contact-section">
+        <p className="srl-contact-label">Support</p>
+        <h2 className="srl-contact-title">{"We're Here For You"}</h2>
+        <p className="srl-contact-sub">Have a question about your Serolira camera? Our team responds within 24 hours.</p>
+        <div className="srl-contact-divider" />
+        <a href="mailto:hello@serolira.com" className="srl-contact-email-link">hello@serolira.com</a>
+        <p className="srl-contact-footer-note">© 2025 Serolira. All rights reserved.</p>
       </section>
+
+      {/* ── STICKY BAR ── */}
+      <div className={`srl-sticky-bar${stickyVisible ? ' visible' : ''}`}>
+        <div className="srl-sticky-price">
+          <Money data={selectedVariant.price} />
+          {selectedVariant?.compareAtPrice && (
+            <small><Money data={selectedVariant.compareAtPrice} /></small>
+          )}
+        </div>
+        <div className="srl-sticky-atc">
+          <AddToCartButton
+            disabled={!selectedVariant?.availableForSale}
+            onClick={() => open('cart')}
+            lines={cartLines}
+          >
+            {selectedVariant?.availableForSale ? 'Add to Bag' : 'Sold Out'}
+          </AddToCartButton>
+        </div>
+      </div>
 
       <Analytics.ProductView
         data={{
-          products: [
-            {
-              id: product.id,
-              title: product.title,
-              price: selectedVariant?.price.amount || '0',
-              vendor: product.vendor,
-              variantId: selectedVariant?.id || '',
-              variantTitle: selectedVariant?.title || '',
-              quantity: 1,
-            },
-          ],
+          products: [{
+            id: product.id,
+            title: product.title,
+            price: selectedVariant?.price.amount || '0',
+            vendor: product.vendor,
+            variantId: selectedVariant?.id || '',
+            variantTitle: selectedVariant?.title || '',
+            quantity: 1,
+          }],
         }}
       />
     </div>
   );
 }
 
-const ALL_REVIEWS = [
-  {name: 'Sofia', photo: rev1, text: 'This lamp completely changed the vibe of my room. I turn it on every night.', date: 'May 2025'},
-  {name: 'Emma', photo: rev2, text: 'My setup finally feels cozy and expensive. Everyone asks where I got it.', date: 'April 2025'},
-  {name: 'Lia', photo: rev3, text: 'The glow looks unreal at night. Best thing I have bought for my room.', date: 'April 2025'},
-  {name: 'Maya', photo: rev4, text: 'I turn it on every single night. The purple mode is so calming.', date: 'March 2025'},
-  {name: 'Zoe', photo: rev5, text: 'My room looks straight from Pinterest now. So aesthetic and premium.', date: 'March 2025'},
-  {name: 'Aria', photo: rev6, text: 'Bought it as a gift and ordered one for myself too. The quality is amazing.', date: 'February 2025'},
-  {name: 'Chloe', photo: rev7, text: 'The jellyfish design is so unique. It transforms the whole room energy.', date: 'February 2025'},
-  {name: 'Isla', photo: rev8, text: 'Perfect for my desk. The soft glow does not strain my eyes at all.', date: 'January 2025'},
-  {name: 'Nora', photo: rev9, text: 'Even better in person. Super easy to set up and the remote is great.', date: 'January 2025'},
-  {name: 'Mia', photo: rev10, text: 'Honestly the best thing I have bought for my room in years. The glow is magical.', date: 'May 2025'},
-  {name: 'Luna', photo: rev11, text: 'My desk setup went from boring to dreamy overnight. Worth every penny.', date: 'April 2025'},
-  {name: 'Ivy', photo: rev12, text: 'The colors are so rich and vivid. Nothing cheap about this lamp at all.', date: 'March 2025'},
-  {name: 'Grace', photo: rev13, text: 'I was skeptical at first but now I recommend it to literally everyone I know.', date: 'February 2025'},
-  {name: 'Jade', photo: rev14, text: 'The packaging was beautiful and the lamp exceeded all my expectations.', date: 'January 2025'},
+/* ── Static Data ── */
+
+const SRL_REVIEWS = [
+  {name: 'Sofia M.', text: 'its actually really cute in person and the photos come out nice i use it mostly for selfies and it does the job well would recommend'},
+  {name: 'Emma R.', text: 'obsessed with this camera honestly the pink one is so cute and the quality is better than i expected for the price'},
+  {name: 'Lia K.', text: 'i got the lavender one and it looks amazing. videos are super smooth and the battery lasts forever. 10/10'},
+  {name: 'Maya T.', text: 'bought this for a trip and it was perfect. fits in my bag easily and the 4K quality is stunning'},
+  {name: 'Zoe F.', text: 'super happy with this purchase. the memory card included is a great bonus. camera is easy to use and photos are crisp'},
+  {name: 'Aria B.', text: 'gift for my sister and she loves it. the mint color is so pretty and the quality surprised us both'},
+  {name: 'Chloe D.', text: 'been using it for 2 months now and still impressed. battery life is amazing and it charges fast'},
+  {name: 'Isla W.', text: 'finally a good camera that doesnt cost a fortune. the 4k video is smooth and the colors are gorgeous'},
+  {name: 'Nora P.', text: 'the blossom pink is just perfect. i get compliments on it everywhere. photos are sharp and beautiful'},
+  {name: 'Mia C.', text: 'great little camera for the price. much better than using a phone. the 32gb card is super convenient'},
+  {name: 'Luna S.', text: 'packaging was cute and the camera looks even better in person. very happy with my purchase'},
+  {name: 'Ivy A.', text: 'using this for my photography hobby and honestly impressed. 4k is crisp and battery is long lasting'},
 ];
 
-function RvCard({r}) {
-  return (
-    <div className="rv-card">
-      <div className="rv-card-top">
-        <div className="rv-avatar-initial">{r.name[0]}</div>
-        <div className="rv-card-author">
-          <p className="rv-name">{r.name}</p>
-          <span className="rv-verified">
-            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            Verified Customer
-          </span>
-        </div>
-      </div>
-      <div className="rv-stars">★★★★★</div>
-      <p className="rv-text">{r.text}</p>
-      {r.photo && (
-        <img src={r.photo} alt="Customer photo" className="rv-proof-img" />
-      )}
-    </div>
-  );
-}
+const SRL_FAQS = [
+  {q: 'How long does the battery last?', a: 'The Serolira 4K Camera battery lasts up to 220 minutes of continuous use — one of the best in its class and our most loved feature by customers.'},
+  {q: 'How long does it take to charge?', a: 'The camera charges fully in approximately 60 minutes using the included USB cable.'},
+  {q: 'Is the 32GB memory card included?', a: 'Yes! Every Serolira camera comes with a 32GB memory card in the box, ready to shoot out of the box.'},
+  {q: 'What colors are available?', a: 'The Serolira 4K Camera comes in 5 colors: Blossom Pink, Pearl White, Lavender, Mint, and Noir.'},
+  {q: 'How long does shipping take?', a: 'Orders are processed within 1–2 business days and delivered within 5–10 business days. Free shipping on all orders.'},
+  {q: 'What is the return policy?', a: 'We offer a 30-day hassle-free return policy. Contact us and we will arrange everything for you.'},
+];
 
-function ReviewsSection() {
-  const col1 = ALL_REVIEWS.slice(0, 5);
-  const col2 = ALL_REVIEWS.slice(5, 10);
-  const col3 = ALL_REVIEWS.slice(10, 14);
+function SrlReviews() {
+  const row1 = SRL_REVIEWS.slice(0, 4);
+  const row2 = SRL_REVIEWS.slice(4, 8);
+  const row3 = SRL_REVIEWS.slice(8, 12);
+  const rows = [
+    {items: row1, cls: 'srl-rv-track'},
+    {items: row2, cls: 'srl-rv-track srl-rv-track--r'},
+    {items: row3, cls: 'srl-rv-track srl-rv-track--3'},
+  ];
   return (
-    <section className="rv-section">
-      <div className="rv-header">
-        <span className="rv-label">CUSTOMER LOVE</span>
-        <h2 className="rv-title">What Our Customers Say</h2>
-        <p className="rv-subtitle">Thousands are transforming their rooms with ESTIERA.</p>
+    <section className="srl-rv-section">
+      <div className="srl-rv-header">
+        <h2 className="srl-rv-title">What Our Customers Say</h2>
       </div>
-      <div className="rv-cols">
-        <div className="rv-col-wrap">
-          <div className="rv-col rv-col--1">
-            {[...col1, ...col1].map((r, i) => <RvCard key={i} r={r} />)}
+      {rows.map(({items, cls}, ri) => (
+        <div key={ri} className="srl-rv-row">
+          <div className={cls}>
+            {[...items, ...items].map((r, i) => (
+              <div key={i} className="srl-rv-card">
+                <div className="srl-rv-card-row">
+                  <span className="srl-rv-stars">★★★★★</span>
+                  <span className="srl-rv-name">{r.name}</span>
+                </div>
+                <p className="srl-rv-text">{r.text}</p>
+              </div>
+            ))}
           </div>
         </div>
-        <div className="rv-col-wrap">
-          <div className="rv-col rv-col--2">
-            {[...col2, ...col2].map((r, i) => <RvCard key={i} r={r} />)}
-          </div>
-        </div>
-        <div className="rv-col-wrap rv-col-wrap--desktop">
-          <div className="rv-col rv-col--3">
-            {[...col3, ...col3].map((r, i) => <RvCard key={i} r={r} />)}
-          </div>
-        </div>
-      </div>
+      ))}
     </section>
   );
 }
 
-const faqs = [
-  {q: 'How long does shipping take?', a: 'We ship within 1-2 business days. Delivery typically takes 5-10 business days depending on your location.'},
-  {q: 'Does it come with a remote control?', a: 'Yes! Every Estiera Jellyfish Lamp includes a wireless remote so you can change colors and brightness effortlessly.'},
-  {q: 'How many RGB colors does it have?', a: 'The lamp features 16 beautiful RGB color modes including soft lavender, ocean blue, rose pink, warm white, and more.'},
-  {q: 'Is it suitable for a bedroom or desk?', a: 'Absolutely. It is designed to work beautifully on nightstands, desks, shelves, or anywhere in your room.'},
-  {q: 'How do I set it up?', a: 'Simply plug it in via USB, turn it on, and use the remote to choose your favorite color. Setup takes under 30 seconds.'},
-];
-
-function FAQList() {
-  const [open, setOpen] = useState(null);
-  return (
-    <div className="tr-faq-list">
-      {faqs.map((item, i) => (
-        <div key={i} className={`tr-faq-item${open === i ? ' tr-faq-item--open' : ''}`}>
-          <button className="tr-faq-q" onClick={() => setOpen(open === i ? null : i)}>
-            <span>{item.q}</span>
-            <span className="tr-faq-icon">{open === i ? '−' : '+'}</span>
-          </button>
-          {open === i && <p className="tr-faq-a">{item.a}</p>}
-        </div>
-      ))}
-    </div>
-  );
-}
+/* ── GraphQL ── */
 
 const PRODUCT_VARIANT_FRAGMENT = `#graphql
   fragment ProductVariant on ProductVariant {
