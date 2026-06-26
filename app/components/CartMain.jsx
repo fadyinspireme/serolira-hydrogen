@@ -68,53 +68,42 @@ function LxToggle({on}) {
   );
 }
 
-function BundleDealCard({cartLine}) {
-  if (!cartLine) return null;
-  const isBundle = (cartLine?.quantity ?? 0) >= 2;
-  const lineId = cartLine?.id;
-  const imageUrl = cartLine?.merchandise?.image?.url;
-  const sym = useCurrencySymbol();
-
+function CameraUpsellCard() {
+  const [added, setAdded] = useState(false);
+  const [upsellColor, setUpsellColor] = useState('Pink');
   return (
-    <CartForm
-      route="/cart"
-      action={CartForm.ACTIONS.LinesUpdate}
-      inputs={{lines: [{id: lineId, quantity: isBundle ? 1 : 2}]}}
-    >
-      <button type="submit" className={`lx-bundle-card${isBundle ? ' lx-bundle-card--on' : ''}`}>
-        <div className="lx-bundle-imgs">
-          {imageUrl ? (
-            <>
-              <img src={imageUrl} alt="lamp" className="lx-bundle-img lx-bundle-img--back" />
-              <img src={imageUrl} alt="lamp" className="lx-bundle-img lx-bundle-img--front" />
-            </>
-          ) : (
-            <div className="lx-bundle-img-placeholder">💡💡</div>
-          )}
-        </div>
-        <div className="lx-bundle-body">
-          <div className="lx-bundle-badges">
-            <span className="lx-bundle-badge-free">FREE Shipping</span>
-            <span className="lx-bundle-badge-save">Save {sym}10</span>
+    <div className="srl-cart-upsell">
+      <p className="srl-cart-upsell-label">You may also like</p>
+      <div className="srl-cart-upsell-inner">
+        <img className="srl-cart-upsell-img" src="/case-product.png" alt="Camera Case" />
+        <div className="srl-cart-upsell-info">
+          <div className="srl-cart-upsell-name">Serolira Premium Camera Case</div>
+          <div className="srl-cart-upsell-colors">
+            {['Pink','Black'].map(c => (
+              <button
+                key={c}
+                className={`srl-cart-upsell-swatch${upsellColor === c ? ' active' : ''}`}
+                style={{background: c === 'Pink' ? '#F0A0B0' : '#1a1a1a'}}
+                onClick={() => setUpsellColor(c)}
+                type="button"
+                aria-label={c}
+              />
+            ))}
+            <span className="srl-cart-upsell-color-name">{upsellColor}</span>
           </div>
-          <p className="lx-bundle-title">Buy 2 — Bundle Deal</p>
-          <div className="lx-bundle-prices">
-            <span className="lx-bundle-price">{sym}39.99</span>
-            <span className="lx-bundle-compare">{sym}49.98</span>
+          <div className="srl-cart-upsell-bottom">
+            <span className="srl-cart-upsell-price">$19.99</span>
+            <button
+              className={`srl-cart-upsell-add${added ? ' added' : ''}`}
+              type="button"
+              onClick={() => setAdded(a => !a)}
+            >
+              {added ? 'Added ✓' : 'Add'}
+            </button>
           </div>
         </div>
-        <div className="lx-bundle-check">
-          {isBundle ? (
-            <svg width="22" height="22" viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="11" fill="#7C3AED"/>
-              <polyline points="7 12 10 15 17 9" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          ) : (
-            <div className="lx-bundle-check-empty" />
-          )}
-        </div>
-      </button>
-    </CartForm>
+      </div>
+    </div>
   );
 }
 
@@ -169,7 +158,7 @@ function UpsellCards({guarantee, onToggleGuarantee, shippingProtection, onToggle
         </div>
       </div>
 
-      <BundleDealCard cartLine={cartLine} />
+      <CameraUpsellCard />
     </div>
   );
 }
@@ -263,7 +252,7 @@ function LxCartEmpty() {
   return (
     <div className="lx-cart-empty">
       <div className="lx-empty-icon">
-        <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#C4B5FD" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="#F0A0B0" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="9" cy="21" r="1"/>
           <circle cx="20" cy="21" r="1"/>
           <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>

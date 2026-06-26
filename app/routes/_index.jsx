@@ -62,16 +62,14 @@ function HeroSection({product}) {
           <span>4.9 · Trusted by 8,000+ creators</span>
         </div>
       </div>
-      {product?.featuredImage && (
-        <div className="hp-hero-img-wrap">
-          <div className="hp-hero-img-glow" />
-          <img
-            src={product.featuredImage.url}
-            alt={product.featuredImage.altText ?? product.title}
-            className="hp-hero-img"
-          />
-        </div>
-      )}
+      <div className="hp-hero-img-wrap">
+        <div className="hp-hero-img-glow" />
+        <img
+          src={product?.featuredImage?.url ?? '/hero4.png'}
+          alt={product?.featuredImage?.altText ?? 'Serolira 4K Camera'}
+          className="hp-hero-img"
+        />
+      </div>
     </section>
   );
 }

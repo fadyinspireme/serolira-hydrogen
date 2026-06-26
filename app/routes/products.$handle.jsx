@@ -247,6 +247,12 @@ export default function Product() {
         </div>
       </section>
 
+      {/* ── SHOT GALLERY ── */}
+      <SrlShotGallery />
+
+      {/* ── PHOTO REVIEWS ── */}
+      <SrlPhotoReviews />
+
       {/* ── SPECS ── */}
       <section className="srl-specs-section">
         <button
@@ -262,12 +268,12 @@ export default function Product() {
         <div className={`srl-acc-body${specsOpen ? ' open' : ''}`}>
           <div className="srl-specs-grid">
             {[
-              ['Resolution', '4K Ultra HD'],
-              ['Battery Life', '220 min'],
-              ['Memory Card', '32 GB'],
+              ['Video', '4K / 1080P'],
+              ['Frame Rate', '60–120 FPS'],
               ['Zoom', '16× Digital'],
-              ['Weight', '280g'],
-              ['Charge Time', '60 min'],
+              ['Focus', 'Auto Focus'],
+              ['Memory', '32GB Card'],
+              ['Battery', '420 Min'],
               ['Stabilization', 'Built-in EIS'],
               ['Colors', '5 Variants'],
             ].map(([label, val]) => (
@@ -280,7 +286,7 @@ export default function Product() {
         </div>
       </section>
 
-      {/* ── REVIEWS ── */}
+      {/* ── REVIEWS MARQUEE ── */}
       <SrlReviews />
 
       {/* ── FAQ ── */}
@@ -343,25 +349,72 @@ export default function Product() {
   );
 }
 
-/* ── Static Data ── */
+/* ── Shot Gallery ── */
+const SHOT_ROW1 = ['shot1.webp','shot3.webp','shot5.webp','shot7.jpg','shot9.jpg','shot11.jpg','shot12.jpg'];
+const SHOT_ROW2 = ['shot2.webp','shot4.webp','shot6.webp','shot8.jpg','shot10.jpg','shot13.jpg'];
 
-const SRL_REVIEWS = [
-  {name: 'Sofia M.', text: 'its actually really cute in person and the photos come out nice i use it mostly for selfies and it does the job well would recommend'},
-  {name: 'Emma R.', text: 'obsessed with this camera honestly the pink one is so cute and the quality is better than i expected for the price'},
-  {name: 'Lia K.', text: 'i got the lavender one and it looks amazing. videos are super smooth and the battery lasts forever. 10/10'},
-  {name: 'Maya T.', text: 'bought this for a trip and it was perfect. fits in my bag easily and the 4K quality is stunning'},
-  {name: 'Zoe F.', text: 'super happy with this purchase. the memory card included is a great bonus. camera is easy to use and photos are crisp'},
-  {name: 'Aria B.', text: 'gift for my sister and she loves it. the mint color is so pretty and the quality surprised us both'},
-  {name: 'Chloe D.', text: 'been using it for 2 months now and still impressed. battery life is amazing and it charges fast'},
-  {name: 'Isla W.', text: 'finally a good camera that doesnt cost a fortune. the 4k video is smooth and the colors are gorgeous'},
-  {name: 'Nora P.', text: 'the blossom pink is just perfect. i get compliments on it everywhere. photos are sharp and beautiful'},
-  {name: 'Mia C.', text: 'great little camera for the price. much better than using a phone. the 32gb card is super convenient'},
-  {name: 'Luna S.', text: 'packaging was cute and the camera looks even better in person. very happy with my purchase'},
-  {name: 'Ivy A.', text: 'using this for my photography hobby and honestly impressed. 4k is crisp and battery is long lasting'},
+function SrlShotGallery() {
+  return (
+    <section className="srl-shot-section">
+      <p className="srl-shot-headline">Shot on Serolira 4K</p>
+      <div className="srl-shot-row">
+        <div className="srl-shot-track">
+          {[...SHOT_ROW1, ...SHOT_ROW1].map((s, i) => (
+            <img key={i} src={`/${s}`} alt="Shot on Serolira" />
+          ))}
+        </div>
+      </div>
+      <div className="srl-shot-row">
+        <div className="srl-shot-track srl-shot-track-2">
+          {[...SHOT_ROW2, ...SHOT_ROW2].map((s, i) => (
+            <img key={i} src={`/${s}`} alt="Shot on Serolira" />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ── Photo Reviews ── */
+const PHOTO_REVIEWS = [
+  {name: 'Sophie M.', loc: 'Lyon, France', text: 'its actually really cute in person and the photos come out nice i use it mostly for selfies and it does the job well would recommend', imgs: ['rev-img-g.avif']},
+  {name: 'Emma K.', loc: 'Austin, TX', text: 'got it for a trip and it worked great takes amazing videos and the memory card being included is a nice touch', imgs: ['rev-img-c.avif','rev-img-f.avif']},
+  {name: 'Giulia R.', loc: 'Milan, Italy', text: 'arrived faster than expected and the packaging was nice the camera feels solid and takes good photos happy with it overall', imgs: ['rev-img-a.avif','rev-img-b.avif']},
+  {name: 'Mia L.', loc: 'Berlin, Germany', text: 'perfect for my photo obsession', imgs: ['rev-img-d.avif']},
+  {name: 'Ava T.', loc: 'New York, NY', text: 'got this as a gift and she loved it the packaging looked nice and the camera works well she uses it all the time now', imgs: ['rev-img-e.avif']},
 ];
 
+function SrlPhotoReviews() {
+  return (
+    <section className="srl-prev-section">
+      <p className="srl-prev-title">What Our Customers Say</p>
+      <div className="srl-prev-track">
+        {PHOTO_REVIEWS.map((r, i) => (
+          <div key={i} className="srl-prev-card">
+            <div className="srl-prev-stars">★★★★★</div>
+            <p className="srl-prev-text">{r.text}</p>
+            {r.imgs.length > 0 && (
+              <div className="srl-prev-photos">
+                {r.imgs.map((img, j) => (
+                  <img key={j} src={`/${img}`} alt={r.name} />
+                ))}
+              </div>
+            )}
+            <div className="srl-prev-author">
+              <span className="srl-prev-name">{r.name}</span>
+              <span className="srl-prev-loc">{r.loc}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ── Static Data ── */
+
 const SRL_FAQS = [
-  {q: 'How long does the battery last?', a: 'The Serolira 4K Camera battery lasts up to 220 minutes of continuous use — one of the best in its class and our most loved feature by customers.'},
+  {q: 'How long does the battery last?', a: 'The Serolira 4K Camera battery lasts up to 420 minutes of continuous use — one of the best in its class.'},
   {q: 'How long does it take to charge?', a: 'The camera charges fully in approximately 60 minutes using the included USB cable.'},
   {q: 'Is the 32GB memory card included?', a: 'Yes! Every Serolira camera comes with a 32GB memory card in the box, ready to shoot out of the box.'},
   {q: 'What colors are available?', a: 'The Serolira 4K Camera comes in 5 colors: Blossom Pink, Pearl White, Lavender, Mint, and Noir.'},
@@ -369,19 +422,76 @@ const SRL_FAQS = [
   {q: 'What is the return policy?', a: 'We offer a 30-day hassle-free return policy. Contact us and we will arrange everything for you.'},
 ];
 
+/* ── Reviews Marquee (full list from original) ── */
+const SRL_RV_ROW1 = [
+  {name:'Sophia M.', text:'bought it for a trip, use it every day now'},
+  {name:'Aria K.', text:'perfect for mirror selfies'},
+  {name:'Elena V.', text:'love it so much'},
+  {name:'Giulia F.', text:'use it for walks, nights out, friends — really nice for everyday'},
+  {name:'Sophie D.', text:'got it for my mom. she takes it on morning walks now'},
+  {name:'Mei L.', text:''},
+  {name:'Nina B.', text:'great for content — small, easy, good quality'},
+  {name:'Emma K.', text:'takes amazing videos. memory card included is a nice touch'},
+  {name:'Alex M.', text:"got it for my girlfriend, she hasn't put it down since"},
+  {name:'Zara A.', text:'obsessed with how it looks on video'},
+  {name:'Valentina C.', text:"didn't expect this quality. photos are sharp, video is smooth"},
+  {name:'Hana J.', text:''},
+  {name:'Bianca T.', text:'my whole feed changed since I got this'},
+  {name:'Camille R.', text:'cute and so easy to use'},
+  {name:'Isabel F.', text:'I am obsessed'},
+  {name:'Lena M.', text:'small enough to carry everywhere, works great for Instagram'},
+  {name:'Priya N.', text:''},
+];
+
+const SRL_RV_ROW2 = [
+  {name:'Chloe W.', text:'my boyfriend got this for me. best gift ever'},
+  {name:'Dana S.', text:'so worth it'},
+  {name:'Iris W.', text:'takes the best sunset photos — colors are warm and natural'},
+  {name:'Marta V.', text:'bought this to stop using my phone for everything. solid'},
+  {name:'Rina O.', text:'perfect for capturing little everyday moments'},
+  {name:'Marco T.', text:''},
+  {name:'Amira D.', text:'battery lasts a full day. photos come out really clean'},
+  {name:'Bianca F.', text:'literally my favorite thing to bring on vacation'},
+  {name:'Emma L.', text:'used it solo traveling, selfie flip screen is a great feature'},
+  {name:'Petra H.', text:'packed it for my trip and used it every single day'},
+  {name:'Yeon J.', text:''},
+  {name:'Rosa M.', text:'colors come out natural and video is smooth'},
+  {name:'Soo Y.', text:'love love love'},
+  {name:'Ravi S.', text:'build quality feels solid, works great outdoors'},
+  {name:'Layla H.', text:''},
+  {name:'Tae Y.', text:'got this for vlogs, smooth video and good selfie quality'},
+  {name:'Ida N.', text:'tiny and works great'},
+];
+
+const SRL_RV_ROW3 = [
+  {name:'Lotte S.', text:'using it every weekend now'},
+  {name:'Jin K.', text:'gave it to my sister. she never puts it down'},
+  {name:'Chiara M.', text:'compact, easy, photos are genuinely nice'},
+  {name:'Felix N.', text:''},
+  {name:'Marie C.', text:'ordered for my daughter. she uses it every day'},
+  {name:'Giulia B.', text:'looks even better in real life'},
+  {name:'Kofi A.', text:'great photos on sunny days — colors really vivid'},
+  {name:'Klara V.', text:''},
+  {name:'Anna P.', text:'better than expected'},
+  {name:'Nadia K.', text:'really happy with this'},
+  {name:'Amara T.', text:'beach photos in sunlight are really nice'},
+  {name:'Clara B.', text:'really nice camera'},
+  {name:'Yuki T.', text:''},
+  {name:'Sofia R.', text:'cute and good quality'},
+  {name:'Fatima B.', text:'exactly what I was looking for'},
+  {name:'Leila A.', text:'use it every single day now'},
+];
+
 function SrlReviews() {
-  const row1 = SRL_REVIEWS.slice(0, 4);
-  const row2 = SRL_REVIEWS.slice(4, 8);
-  const row3 = SRL_REVIEWS.slice(8, 12);
   const rows = [
-    {items: row1, cls: 'srl-rv-track'},
-    {items: row2, cls: 'srl-rv-track srl-rv-track--r'},
-    {items: row3, cls: 'srl-rv-track srl-rv-track--3'},
+    {items: SRL_RV_ROW1, cls: 'srl-rv-track'},
+    {items: SRL_RV_ROW2, cls: 'srl-rv-track srl-rv-track--r'},
+    {items: SRL_RV_ROW3, cls: 'srl-rv-track srl-rv-track--3'},
   ];
   return (
     <section className="srl-rv-section">
       <div className="srl-rv-header">
-        <h2 className="srl-rv-title">What Our Customers Say</h2>
+        <h2 className="srl-rv-title">Reviews</h2>
       </div>
       {rows.map(({items, cls}, ri) => (
         <div key={ri} className="srl-rv-row">
@@ -392,7 +502,7 @@ function SrlReviews() {
                   <span className="srl-rv-stars">★★★★★</span>
                   <span className="srl-rv-name">{r.name}</span>
                 </div>
-                <p className="srl-rv-text">{r.text}</p>
+                {r.text && <p className="srl-rv-text">{r.text}</p>}
               </div>
             ))}
           </div>
