@@ -384,6 +384,28 @@ export type StoreRobotsQueryVariables = StorefrontAPI.Exact<{
 
 export type StoreRobotsQuery = {shop: Pick<StorefrontAPI.Shop, 'id'>};
 
+export type FeaturedProductQueryVariables = StorefrontAPI.Exact<{
+  [key: string]: never;
+}>;
+
+export type FeaturedProductQuery = {
+  products: {
+    nodes: Array<
+      Pick<StorefrontAPI.Product, 'title' | 'handle'> & {
+        featuredImage?: StorefrontAPI.Maybe<
+          Pick<StorefrontAPI.Image, 'url' | 'altText'>
+        >;
+        priceRange: {
+          minVariantPrice: Pick<
+            StorefrontAPI.MoneyV2,
+            'amount' | 'currencyCode'
+          >;
+        };
+      }
+    >;
+  };
+};
+
 export type MoneyProductItemFragment = Pick<
   StorefrontAPI.MoneyV2,
   'amount' | 'currencyCode'
@@ -662,6 +684,11 @@ export type ProductFragment = Pick<
   | 'encodedVariantExistence'
   | 'encodedVariantAvailability'
 > & {
+  images: {
+    nodes: Array<
+      Pick<StorefrontAPI.Image, 'id' | 'url' | 'altText' | 'width' | 'height'>
+    >;
+  };
   options: Array<
     Pick<StorefrontAPI.ProductOption, 'name'> & {
       optionValues: Array<
@@ -776,6 +803,14 @@ export type ProductQuery = {
       | 'encodedVariantExistence'
       | 'encodedVariantAvailability'
     > & {
+      images: {
+        nodes: Array<
+          Pick<
+            StorefrontAPI.Image,
+            'id' | 'url' | 'altText' | 'width' | 'height'
+          >
+        >;
+      };
       options: Array<
         Pick<StorefrontAPI.ProductOption, 'name'> & {
           optionValues: Array<
@@ -1101,6 +1136,10 @@ interface GeneratedQueryTypes {
     return: StoreRobotsQuery;
     variables: StoreRobotsQueryVariables;
   };
+  '#graphql\n  query FeaturedProduct {\n    products(first: 1) {\n      nodes {\n        title\n        handle\n        featuredImage { url altText }\n        priceRange { minVariantPrice { amount currencyCode } }\n      }\n    }\n  }\n': {
+    return: FeaturedProductQuery;
+    variables: FeaturedProductQueryVariables;
+  };
   '#graphql\n  #graphql\n  fragment MoneyProductItem on MoneyV2 {\n    amount\n    currencyCode\n  }\n  fragment ProductItem on Product {\n    id\n    handle\n    title\n    featuredImage {\n      id\n      altText\n      url\n      width\n      height\n    }\n    priceRange {\n      minVariantPrice {\n        ...MoneyProductItem\n      }\n      maxVariantPrice {\n        ...MoneyProductItem\n      }\n    }\n  }\n\n  query Collection(\n    $handle: String!\n    $country: CountryCode\n    $language: LanguageCode\n    $first: Int\n    $last: Int\n    $startCursor: String\n    $endCursor: String\n  ) @inContext(country: $country, language: $language) {\n    collection(handle: $handle) {\n      id\n      handle\n      title\n      description\n      products(\n        first: $first,\n        last: $last,\n        before: $startCursor,\n        after: $endCursor\n      ) {\n        nodes {\n          ...ProductItem\n        }\n        pageInfo {\n          hasPreviousPage\n          hasNextPage\n          endCursor\n          startCursor\n        }\n      }\n    }\n  }\n': {
     return: CollectionQuery;
     variables: CollectionQueryVariables;
@@ -1125,7 +1164,7 @@ interface GeneratedQueryTypes {
     return: PoliciesQuery;
     variables: PoliciesQueryVariables;
   };
-  '#graphql\n  query Product(\n    $country: CountryCode $handle: String!\n    $language: LanguageCode $selectedOptions: [SelectedOptionInput!]!\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) { ...Product }\n  }\n  #graphql\n  fragment Product on Product {\n    id title vendor handle descriptionHtml description\n    encodedVariantExistence encodedVariantAvailability\n    options {\n      name\n      optionValues {\n        name\n        firstSelectableVariant { ...ProductVariant }\n        swatch { color image { previewImage { url } } }\n      }\n    }\n    selectedOrFirstAvailableVariant(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {\n      ...ProductVariant\n    }\n    adjacentVariants(selectedOptions: $selectedOptions) { ...ProductVariant }\n    seo { description title }\n  }\n  #graphql\n  fragment ProductVariant on ProductVariant {\n    availableForSale\n    compareAtPrice { amount currencyCode }\n    id\n    image { __typename id url altText width height }\n    price { amount currencyCode }\n    product { title handle }\n    selectedOptions { name value }\n    sku title\n    unitPrice { amount currencyCode }\n  }\n\n\n': {
+  '#graphql\n  query Product(\n    $country: CountryCode $handle: String!\n    $language: LanguageCode $selectedOptions: [SelectedOptionInput!]!\n  ) @inContext(country: $country, language: $language) {\n    product(handle: $handle) { ...Product }\n  }\n  #graphql\n  fragment Product on Product {\n    id title vendor handle descriptionHtml description\n    encodedVariantExistence encodedVariantAvailability\n    images(first: 10) { nodes { id url altText width height } }\n    options {\n      name\n      optionValues {\n        name\n        firstSelectableVariant { ...ProductVariant }\n        swatch { color image { previewImage { url } } }\n      }\n    }\n    selectedOrFirstAvailableVariant(selectedOptions: $selectedOptions, ignoreUnknownOptions: true, caseInsensitiveMatch: true) {\n      ...ProductVariant\n    }\n    adjacentVariants(selectedOptions: $selectedOptions) { ...ProductVariant }\n    seo { description title }\n  }\n  #graphql\n  fragment ProductVariant on ProductVariant {\n    availableForSale\n    compareAtPrice { amount currencyCode }\n    id\n    image { __typename id url altText width height }\n    price { amount currencyCode }\n    product { title handle }\n    selectedOptions { name value }\n    sku title\n    unitPrice { amount currencyCode }\n  }\n\n\n': {
     return: ProductQuery;
     variables: ProductQueryVariables;
   };
