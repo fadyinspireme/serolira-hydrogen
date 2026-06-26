@@ -1,5 +1,7 @@
-name: Storefront 1000140368
-on: [push]
+name: Deploy to Oxygen (Serolira)
+on:
+  push:
+    branches: [main]
 
 permissions:
   contents: read
@@ -38,4 +40,4 @@ jobs:
       - name: Build and Publish to Oxygen
         run: npx shopify hydrogen deploy
         env:
-          SHOPIFY_HYDROGEN_DEPLOYMENT_TOKEN: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000140368 }}
+          SHOPIFY_HYDROGEN_DEPLOYMENT_TOKEN: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN }}
